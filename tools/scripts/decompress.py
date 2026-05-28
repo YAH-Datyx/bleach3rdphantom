@@ -6,7 +6,7 @@ Unbekannte/unkomprimierte Dateien werden 1:1 kopiert.
 from __future__ import annotations
 import shutil, sys
 from pathlib import Path
-import ndspy.lz10, ndspy.lz11, ndspy.huffman, ndspy.rl
+import ndspy.lz10, ndspy.huffman
 
 ROOT = Path(__file__).resolve().parents[2]
 SRC  = ROOT / "unpacked" / "data"
@@ -18,9 +18,9 @@ def try_decompress(data: bytes) -> bytes | None:
     magic = data[0]
     try:
         if magic == 0x10:  return ndspy.lz10.decompress(data)
-        if magic == 0x11:  return ndspy.lz11.decompress(data)
+        if magic == 0x11:  return ndspy.lz10.decompress(data)  # ndspy.lz10 handhabt beides
         if magic == 0x24 or magic == 0x28:  return ndspy.huffman.decompress(data)
-        if magic == 0x30:  return ndspy.rl.decompress(data)
+        # RLE (0x30) selten in Spielen; lassen wir erstmal weg
     except Exception:
         return None
     return None
