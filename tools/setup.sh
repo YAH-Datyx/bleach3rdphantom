@@ -25,7 +25,7 @@ python3 -m venv "$ROOT/.venv"
 # shellcheck disable=SC1091
 source "$ROOT/.venv/bin/activate"
 pip install --upgrade pip
-pip install ndspy lz77 pillow tabulate
+pip install ndspy pillow tabulate
 
 echo "== ndstool (devkitPro-Quelle, ohne devkitPro-Installer) =="
 if [ ! -x "$BIN/ndstool" ]; then
