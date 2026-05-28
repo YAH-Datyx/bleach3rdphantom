@@ -12,6 +12,9 @@ Reverse-Engineering-Projekt zum Nintendo-DS-Spiel *Bleach: The 3rd Phantom*
 
 ## Setup
 
+**Windows-User:** siehe [`docs/windows-setup.md`](docs/windows-setup.md) für die WSL2-Einrichtung.
+
+**Linux/WSL/macOS:**
 ```bash
 ./tools/setup.sh           # installiert ndstool, dsdecmp, ARM-Toolchain, Python-Deps
 ./tools/unpack.sh          # entpackt rom/Bleach3rdPhantom.nds nach unpacked/
