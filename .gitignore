@@ -1,0 +1,46 @@
+# --- NIEMALS committen: urheberrechtlich geschütztes Material ---
+# ROM-Dumps
+*.nds
+*.nds.bak
+*.sav
+*.dsv
+
+# Extrahierte ROM-Inhalte
+/rom/
+/extracted/
+/unpacked/
+/dump/
+arm9.bin
+arm7.bin
+arm9_*.bin
+arm7_*.bin
+y9.bin
+y7.bin
+banner.bin
+header.bin
+overlay/
+overlay_*.bin
+
+# Built/patched ROMs
+/build/
+*.patched.nds
+*.xdelta
+*.ips
+*.bps
+
+# Tools (lokal installiert)
+/tools/bin/
+/tools/vendor/
+/tools/*.AppImage
+
+# Python / venv
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
