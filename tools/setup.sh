@@ -15,6 +15,7 @@ echo "== APT-Pakete =="
 $SUDO apt-get update -y
 $SUDO apt-get install -y --no-install-recommends \
     build-essential git wget curl unzip p7zip-full \
+    autoconf automake libtool pkg-config \
     python3 python3-pip python3-venv \
     xdelta3 \
     gcc-arm-none-eabi binutils-arm-none-eabi \
@@ -29,7 +30,10 @@ pip install ndspy pillow tabulate
 
 echo "== ndstool (devkitPro-Quelle, ohne devkitPro-Installer) =="
 if [ ! -x "$BIN/ndstool" ]; then
-  git clone --depth 1 https://github.com/devkitPro/ndstool "$VENDOR/ndstool"
+  if [ ! -d "$VENDOR/ndstool/.git" ]; then
+    rm -rf "$VENDOR/ndstool"
+    git clone --depth 1 https://github.com/devkitPro/ndstool "$VENDOR/ndstool"
+  fi
   ( cd "$VENDOR/ndstool" && ./autogen.sh && ./configure && make -j"$(nproc)" )
   cp "$VENDOR/ndstool/ndstool" "$BIN/ndstool"
 fi
