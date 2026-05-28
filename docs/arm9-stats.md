@@ -61,3 +61,21 @@ Beispiel — Charakter #3, HP von 433 → 9999:
 - char_offset = 0xfd882 + 2 * 0x46 = `0xfd90e`
 - hp_offset = `0xfd916`
 - Bytes ändern: `B1 01` → `0F 27` (9999 als u16 LE)
+
+## Weitere Tabellen in arm9.bin
+
+| Offset | Inhalt | Doc |
+|---|---|---|
+| `0xfd882` | Story-Mode Stats (255 × 70 Bytes) | hier |
+| `0xffc56` | VS-Mode Stats | hier |
+| **`0xf3b58`** | **Tower-of-Souls Floor-Tabelle** (30 × 6 Bytes) | siehe `floor-roster.md` |
+
+## Stat-Skalierung in-game
+
+Die Werte in der Tabelle sind **Base-Stats** für Level X (siehe `level`-Feld). Im Spiel werden Stats skaliert:
+
+```
+displayed_stat = base_stat + (current_level - base_level) × growth_rate
+```
+
+Der `growth_rate` variiert pro Stat und Char-Klasse. Eine globale Mod (z.B. HP=9876 für alle aktiven Chars) wurde verwendet um per-Floor-Char-IDs via Binary Search zu identifizieren — siehe `char-ids.md`.
