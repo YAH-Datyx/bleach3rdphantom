@@ -9,6 +9,7 @@
 /rom/
 /extracted/
 /unpacked/
+/unpacked-decomp/
 /dump/
 arm9.bin
 arm7.bin
