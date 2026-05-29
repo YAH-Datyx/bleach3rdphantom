@@ -79,11 +79,6 @@ cp build/Bleach3rdPhantom.patched.nds \
 
 ## Session 2 Update (Floor 9 = Floor 12 Copy + Char-ID-Hunting)
 
-### Erkenntnis: Recruit-Aware Logic
-Das Spiel detektiert beim Spawn ob ein char_id im Save rekrutiert ist und konvertiert ihn automatisch zum Ally — **egal welches team-Feld** wir setzen. Bestätigt durch User-Save mit 50+ rekrutierten Bleach/3rd-Phantom-Chars.
-
-**Konsequenz:** Echte Tower-Enemies brauchen Char-IDs die nie rekrutierbar sind. Hollow-IDs (154-159, 185, 188, 208, 213, 235) sind die zuverlässigsten.
-
 ### Erfolgreiche Floor-Mods (Session 2)
 
 | Floor | Source | Map-ID | Status |
@@ -117,3 +112,26 @@ Naives Klonen eines belegten Slot-Templates zum Anlegen neuer Enemy-Entries in l
 
 ### Floor-Mode-Mismatch
 Floor 7 crasht mit Map-15 UND Map-30 UND Map-31, selbst mit pure Original-Daten. Floor 9 funktioniert mit Map-31. Unklar warum Floor 7 spezifisch problematisch ist — vermutlich Floor-spezifischer Code in arm9 oder Overlay.
+
+## Session 4 Update — Per-Floor Enemy-Cap
+
+### Erkenntnis: Hardcoded Enemy-Cap pro Floor
+Die Anzahl sichtbarer Enemies ist **per Floor-Index hardcoded in arm9**, nicht durch dpos-Slot-Count steuerbar:
+
+| Floor (Tower) | Max sichtbare Enemies | dpos-Quelle bei Tests |
+|---|---|---|
+| 5 | ~24 (alle visible) | db_dpos_930 (19 slots) |
+| 8 | ~13 visible | db_dpos_930 (19 slots) |
+| 9 | ~13 visible | db_dpos_930 (19 slots) |
+| 9 + Map=11 | 6 visible | db_dpos_928 (42 slots) |
+
+Adding mehr Slots zu db_dpos_9XX wirkt nicht — die zusätzlichen Slots werden vom Spiel ignoriert beim Spawn.
+
+### Workaround
+Für mehr Enemies muss die Cap-Logik in arm9.bin gefunden und gepatcht werden (Ghidra Job). Ohne RE: max ~13-24 Enemies per Tower-Floor.
+
+### Floor 9 finales Setup
+- Source: db_dpos_930 (Floor 30)
+- Map: 31
+- ~13 sichtbare Enemies aus großem Safe-Pool
+- Funktioniert stabil
