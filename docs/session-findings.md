@@ -70,9 +70,50 @@ cp build/Bleach3rdPhantom.patched.nds \
 
 ## TODOs für nächste Session
 
-- [ ] Floor 7 Crash debuggen — vielleicht Floor 6's Content kopieren statt Floor 14
+- [ ] Floor 7 Crash debuggen — Map-Mismatch oder andere Floor-spezifische Daten
 - [ ] dev+ DeSmuME Build installieren für funktionierende Breakpoints
 - [ ] Ghidra-Setup für ARM9 (Base: `0x02000000`) — Funktion bei `0x57114` analysieren (referenziert Tower-Tabelle)
 - [ ] Weitere Char-IDs verifizieren (besonders 30-99 Range, untested)
 - [ ] AI-Modus-Werte durchtesten (field 3 = 10 vs 15 keine sichtbaren Unterschiede bisher)
 - [ ] Skill/Bankai-Modifikation — wird Ghidra-Analyse von AI-Decision-Code erfordern
+
+## Session 2 Update (Floor 9 = Floor 12 Copy + Char-ID-Hunting)
+
+### Erkenntnis: Recruit-Aware Logic
+Das Spiel detektiert beim Spawn ob ein char_id im Save rekrutiert ist und konvertiert ihn automatisch zum Ally — **egal welches team-Feld** wir setzen. Bestätigt durch User-Save mit 50+ rekrutierten Bleach/3rd-Phantom-Chars.
+
+**Konsequenz:** Echte Tower-Enemies brauchen Char-IDs die nie rekrutierbar sind. Hollow-IDs (154-159, 185, 188, 208, 213, 235) sind die zuverlässigsten.
+
+### Erfolgreiche Floor-Mods (Session 2)
+
+| Floor | Source | Map-ID | Status |
+|-------|--------|--------|--------|
+| 5 | Floor 30 | 31 | ✓ stabil, 24 Slots mit gemischtem Pool |
+| 6 | Floor 14 | 15 | ✓ stabil |
+| 8 | Floor 30 | 31 | ✓ stabil, nur Hell Mantis |
+| 9 | Floor 12 | 31 | ✓ stabil, 10 Slots mit confirmed pool |
+| 7 | — | — | ✗ instabil, mehrere Approaches crashen |
+
+### Neu identifizierte Char-IDs
+
+Aus Floor 9 Testing:
+- 144 = Kusaka (recruited → Ally)
+- 157 = Frog Head Tech (HP 1528)
+- 158 = Frog Head Power (HP 1545)
+- 181 = Ukitake (Tech enemy)
+- 188 = Matsuri-Variante (namenlos, Power)
+- 199 = Kaien (Power)
+- 208 = Hisagi (Speed, HP 1501)
+- 213 = Evil Eater (Speed Hollow, HP 3501)
+- 219 = Urahara Past (Tech)
+- 226 = Urahara current (Tech)
+- 235 = Matsuri-Variante (namenlos, Speed)
+
+### Neu identifizierte broken IDs
+30, 110, 170, 193 — zusätzlich zu früheren {90, 100, 145, 146, 147, 150, 175, 195}
+
+### Erkenntnis: Template-Cloning für neue Slots
+Naives Klonen eines belegten Slot-Templates zum Anlegen neuer Enemy-Entries in leeren Slots **funktioniert nicht zuverlässig** — Floor 9 mit 20 neu-angelegten Slots zeigte 0 Enemies trotz Template-Übernahme. Sicherer ist: **nur existierende Slots überschreiben** (char_id + level ändern), nichts Neues anlegen.
+
+### Floor-Mode-Mismatch
+Floor 7 crasht mit Map-15 UND Map-30 UND Map-31, selbst mit pure Original-Daten. Floor 9 funktioniert mit Map-31. Unklar warum Floor 7 spezifisch problematisch ist — vermutlich Floor-spezifischer Code in arm9 oder Overlay.

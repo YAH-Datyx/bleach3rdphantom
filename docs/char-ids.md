@@ -4,21 +4,43 @@ In-game-Tests haben folgende Char-IDs identifiziert. Pool zum sicheren Nutzen f�
 
 ## Visuell bestätigte Charaktere
 
-| ID | Name | Hinweis |
-|----|------|---------|
-| 14 | Yamamoto (wahrscheinlich) | Floor 30, Lv 85, ~5200 HP — Captain-Commander |
-| 21, 23, 25, 27, 29 | Squad 11 (Kenpachi-Themed Variants) | Partner-Rolle auf Floor 14/30 |
-| 125 | D-Roy Linker | Floor 30 Slot 23, Lv 78 (Arrancar) |
-| 141 | Ikkaku Madarame (vermutet) | Floor 14 Boss-Slot |
-| 154, 155, 185 | Hell Mantis (Hollow-Templates) | Power/Tech-Varianten |
-| 156 | Sky Rift | „NonCom" — Portal-/Effekt-Entity, kein echter Char |
-| 200 | Fujimaru Kudō | Hauptcharakter (3rd Phantom MC, blond) |
-| 220 | Fujimaru-Variante | weitere Fujimaru-Form |
-| 230 | Unbekannte blonde Schülerin | wahrscheinlich Matsuri-ähnlich |
-| 240 | Shiyo Kudō | Fujimarus Schwester |
-| 245 | Kon | Plüsch-Löwe (Maskottchen) |
-| 250 | Drunk Reaper | wahrscheinlich Shunsui Kyoraku |
-| 254 | Ichigo Kurosaki | Hauptcharakter Bleach |
+### Named (echte Charaktere, nutzbar als Enemy wenn nicht rekrutiert)
+
+| ID | Name | Klasse | Quelle |
+|----|------|--------|--------|
+| 14 | Yamamoto (wahrscheinlich) | Power | Floor 30, Lv 85, ~5200 HP |
+| 21, 23, 25, 27, 29 | Squad 11 (Kenpachi-Themed) | Power | Floor 14/30 Partner |
+| 125 | D-Roy Linker | Speed | Floor 30 Slot 23, Lv 78 |
+| 141 | Ikkaku Madarame (vermutet) | Power | Floor 14 Boss-Slot |
+| 144 | Kusaka | Speed | **Recruited → wird Ally** |
+| 181 | Ukitake | Tech | Floor 9 Test, Lv 88 Enemy |
+| 199 | Kaien | Power | Floor 9 Test, Lv 88 Enemy |
+| 200 | Fujimaru Kudō | Speed | 3rd Phantom MC |
+| 208 | Hisagi | Speed | Floor 9 Test, HP 1501 |
+| 219 | Urahara (Past) | Tech | Floor 9 Test |
+| 220 | Fujimaru-Variante | — | (unsichtbar bei Recruit) |
+| 226 | Urahara (current) | Tech | Floor 9 Test, HP 1276 |
+| 230 | Matsuri (vermutlich) | Power | Recruited |
+| 240 | Shiyo Kudō | Speed | 3rd Phantom MC Schwester |
+| 245 | Kon | Tech | Plüsch-Löwe |
+| 250 | Drunk Reaper (Kyoraku?) | Power | Lv 88 Test |
+| 254 | Ichigo Kurosaki | All | Bleach MC |
+
+### Hollow / Enemy-Only (nie rekrutierbar — beste Wahl für Tower-Mods)
+
+| ID | Name | Klasse | Hinweis |
+|----|------|--------|---------|
+| 154 | Hell Mantis | Tech | Hollow-Template |
+| 155 | Hell Mantis | Power | Hollow-Template |
+| 156 | Sky Rift | NonCom | Portal/Effekt |
+| 157 | Frog Head | Tech | HP 1528 @ Lv 88 |
+| 158 | Frog Head | Power | HP 1545 @ Lv 88 |
+| 159 | Frog Head (variant) | — | (Floor 12 native) |
+| 185 | Hell Mantis | Power | Hollow-Template |
+| 188 | Matsuri-Variante (namenlos) | Power | HP 1067 @ Lv 88 |
+| 208 | Hisagi (variant) | Speed | — |
+| 213 | Evil Eater | Speed | HP 3501 @ Lv 88, tanky |
+| 235 | Matsuri-Variante (namenlos) | Speed | HP 1067 @ Lv 88 |
 
 ## Char-Klassen (aus In-Game UI)
 
@@ -28,6 +50,7 @@ In-game-Tests haben folgende Char-IDs identifiziert. Pool zum sicheren Nutzen f�
 | Speed | hohe SPD/EVA, niedrige DEF |
 | Tech | hoher MAG, durchschnittlich sonst |
 | NonCom | kein Combat-Char (Portale, Spawn-Points) |
+| All | All-rounder (Ichigo) |
 
 ## Stat-Skalierung
 
@@ -40,11 +63,18 @@ Soi Fon-Beispiel: Lv 28, displayed HP 533. Wenn Base-Tabelle alle IDs mit HP=987
 
 ## Bekannt kaputte / instabile IDs
 
-Diese verursachen Crash beim Spawnen:
+Diese verursachen Crash beim Spawnen (vermutlich Filler-Slots ohne komplette Sprite/Animation/Stats):
 
-- **100, 145, 146, 147, 150, 175, 195** — vermutete „Filler"-IDs ohne komplette Daten
+`30, 90, 100, 110, 145, 146, 147, 150, 170, 175, 193, 195`
 
 Einer davon ist der „rothaarige kleine Junge" der nur einmal in der Story als Filler auftaucht und keine Animationen hat.
+
+## Unsichtbar / vom Spiel gefiltert
+
+| ID | Verhalten |
+|----|-----------|
+| 220 | Slot wird gesetzt aber Char ist nicht sichtbar auf der Map (vermutlich Fujimaru-Recruit-Filter) |
+| 232, 241 | Keine sichtbare Änderung |
 
 ## Identifikations-Workflow (Binary Search)
 
@@ -54,17 +84,30 @@ Um eine unbekannte Char-ID zu finden:
 2. **In-Game**: Char im Spiel anschauen — wenn HP `9876 + level_offset` zeigt, ist Char in der Tabelle
 3. **Binary Search**: Halbiere die Patch-Range bis genaue ID gefunden
 
-Beispiel-Skript siehe `tools/scripts/find_char_id.py` (TODO falls noch nicht erstellt).
+## Recruit-Aware Logic (Wichtig!)
+
+Wenn der Spieler einen char_id rekrutiert hat (im Save-Game), wird dieser char_id beim Enemy-Spawn **automatisch zum Ally** mit dem Save-Level — egal welches `team`-Feld gesetzt wird.
+
+**Konsequenz für Mods:** Um echte Tower-Enemies zu bauen, nutze Char-IDs die der Spieler **nicht** rekrutiert hat. Hollow-IDs (154-159, 185, 188, 208, 213, 235) sind die sichersten Choices.
 
 ## Pool-Empfehlungen für Floor-Mods
 
-**Sicher (visuell bestätigt, kein Crash):**
-- 21, 23, 25, 27, 29 (Squad 11) — aber NUR als Enemy verwenden falls nicht gleichzeitig Partner!
-- 130-143 außer 141 (gebuffter Bereich, mehrere Bleach-Chars)
-- 200, 220, 230, 240, 245, 250, 254 (Haupt-/Recruitable-Chars)
-- 216, 217, 218 (Floor 14 Original-Bosse)
+**Garantiert Enemy (Hollow-only, kein Recruit-Konflikt):**
+```python
+HOLLOW_POOL = [154, 155, 156, 185,           # Hell Mantis & Sky Rift
+               157, 158, 159,                 # Frog Head Varianten
+               188, 208, 213, 235]            # weitere Hollow-Types
+```
 
-**Erkundet auf Floor 30 (Endgame-Tower):**
-- 5, 14, 43, 113, 115, 125, 129, 132, 133, 141 (regulär)
-- 154, 155, 156, 185 (Hollow-Templates, nicht-named)
-- 253, 254 (Hauptcharaktere)
+**Named Enemies (mit Risiko Ally-Konvertierung wenn rekrutiert):**
+```python
+NAMED_POOL = [181, 199, 213, 219, 226]       # Ukitake, Kaien, Evil Eater,
+                                              # Urahara Past, Urahara
+```
+
+**Vollständiger Floor-9-Pool (14 IDs, alle bestätigt):**
+```python
+ALL_TESTED = [154, 155, 156, 157, 158, 159,
+              181, 185, 188, 199, 208, 213,
+              219, 226, 235]
+```
