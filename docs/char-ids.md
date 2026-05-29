@@ -42,6 +42,45 @@ In-game-Tests haben folgende Char-IDs identifiziert. Pool zum sicheren Nutzen f�
 | 213 | Evil Eater | Speed | HP 3501 @ Lv 88, tanky |
 | 235 | Matsuri-Variante (namenlos) | Speed | HP 1067 @ Lv 88 |
 
+### Enemy-Variants von Bleach-Hauptcharakteren (durch Session 3 entdeckt)
+
+Trotz dass der Spieler diese Charaktere rekrutiert hat, gibt es spezifische ID-Varianten die als Lv-88-ENEMY erscheinen statt Ally — wahrscheinlich anderer Sprite-Slot mit Enemy-Flag:
+
+| ID | Name | Klasse | Hinweis |
+|----|------|--------|---------|
+| 181 | Ukitake (enemy variant) | Tech | Lv 88 Enemy |
+| 197 | Hanataro (enemy variant) | NonCom | Healing Support |
+| 199 | Kaien | Power | Lv 88 Enemy, HP 1493 |
+| 211 | Orihime (enemy variant) | Tech | HP 997 |
+| 219 | Urahara Past | Tech | HP 1276 |
+| 226 | Urahara (current) | Tech | HP 1276 |
+| 228 | Rukia (enemy variant) | Speed | HP 1025 |
+| 247 | Shinji (Vizard) | Tech | HP 1597 |
+| 248 | Hiyori (Vizard) | Speed | HP 1223 |
+| 252 | Giant Entity | All | HP 5752 — Boss-tier! |
+
+### Aizen-Boss-Variants
+
+Mehrere Aizen-Enemy-IDs entdeckt:
+- Eine ID gibt Aizen Tech Lv 88 normal (HP ~1122)
+- Eine ID gibt **Boss-Aizen All-Klasse** Lv 88, **HP 9714** — extrem tanky, wahrscheinlich Hueco-Mundo-Endform
+
+### Andere named Enemies (Session 3 IDs noch nicht alle einzeln gemappt)
+- Don Kan'onji (TV Geisterjäger, Tech, HP 1502)
+- Yoruichi (Speed enemy variant + All-Class-Variant)
+- Konoka (NonCom, SP Recovery)
+- Momo (Speed)
+- Nemu (Tech)
+- Jidanbo (Power, HP 3057 — tank)
+- Izuru (Tech enemy variant)
+- Chad (Power)
+- Uryu (Speed enemy variant)
+- Kukaku (named enemy)
+- Rangiku (Tech enemy variant)
+- "M. Soul Reaper" (Male Generic Shinigami)
+- "Female Spirit" (NonCom generic)
+- Matsuri Kudo enemy variant (Power, HP 1164)
+
 ## Char-Klassen (aus In-Game UI)
 
 | Klasse | Bedeutung |
