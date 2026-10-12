@@ -20,6 +20,14 @@ Reverse-Engineering-Projekt zum Nintendo-DS-Spiel *Bleach: The 3rd Phantom*
 ./tools/unpack.sh          # entpackt rom/Bleach3rdPhantom.nds nach unpacked/
 ```
 
+## Mit Mods im Emulator spielen (Handy & PC)
+
+```bash
+python3 tools/scripts/make_mod.py mods/*.json   # → build/Bleach3rdPhantom.mod.nds + .xdelta
+```
+
+Emulatoren, Patchen auf dem Handy und Spielstand: [`docs/emulator-setup.md`](docs/emulator-setup.md)
+
 ## Spieldaten als JSON, Mods & eigene App
 
 ```bash
