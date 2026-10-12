@@ -16,11 +16,18 @@ aller Dateigruppen steht in [`file-formats-scan.md`](file-formats-scan.md).
 |---|---|---|
 | Huffman 8-bit (`0x28`) / 4-bit (`0x24`) | fast alle `yamada/`, `kuro/`, `kow/`-`.bin` | ✅ `decompress.py`. Der Fehler bei der Kinderknoten-Adresse ist behoben, 2756/2756 korrekt |
 | LZ10/LZ11 | kaum | ✅ ndspy |
-| Huffman-**Encoder** | nötig zum Zurückschreiben geänderter Assets | ❌ offen. Alternative: prüfen, ob der Loader auch LZ10 akzeptiert |
+| Huffman-**Encoder** | Zurückschreiben geänderter Assets | ✅ `compress.py`. Alle 2756 Dateien round-trip-getestet (neu komprimiert → identisch entpackt) |
 
 ```bash
 python3 tools/scripts/decompress.py      # unpacked/data → unpacked-decomp/data (gitignored)
+# … Dateien in unpacked-decomp/ bearbeiten …
+python3 tools/scripts/recompress.py      # geänderte Dateien neu komprimieren → unpacked/data
+python3 tools/scripts/build_rom.py       # rom/ + unpacked/ → build/Bleach3rdPhantom.patched.nds
 ```
+
+`build_rom.py` braucht kein ndstool und übernimmt nur Dateien, die sich vom
+Original unterscheiden. Getestet: Ohne Änderungen ist die gebaute ROM
+inhaltlich identisch, und eine geänderte Map-Grafik kommt korrekt in der ROM an.
 
 ## Inhalte nach Bereich
 
@@ -50,8 +57,8 @@ python3 tools/scripts/decompress.py      # unpacked/data → unpacked-decomp/dat
 - **Audio:** ADX/AHX ist Standard und lässt sich mit vgmstream nach WAV/OGG wandeln.
 - **Skripte und Text:** größter offener Block. Nötig sind die BSVE-Opcodes und die
   BGSM-Zeichentabelle (über die Schrift).
-- **Zurückschreiben in die ROM:** Für Daten-Mods geht das schon. Für geänderte
-  Grafiken und Skripte fehlt ein Huffman-Encoder.
+- **Zurückschreiben in die ROM:** geht für Daten, Grafiken und jede andere
+  Datei (`recompress.py` + `build_rom.py`).
 
 Exportierte Assets gehören den Rechteinhabern und bleiben lokal in `build/`
 bzw. `unpacked-decomp/` (beide gitignored).

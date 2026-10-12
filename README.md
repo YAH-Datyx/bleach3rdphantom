@@ -25,7 +25,7 @@ Reverse-Engineering-Projekt zum Nintendo-DS-Spiel *Bleach: The 3rd Phantom*
 ```bash
 python3 tools/scripts/gamedata.py export            # Stats, Tower, Floors → gamedata/*.json
 python3 tools/scripts/gamedata.py apply mods/*.json # eigene Mods stapeln + validieren
-./tools/repack.sh
+./tools/repack.sh            # oder ohne ndstool: python3 tools/scripts/build_rom.py
 ```
 
 - Format und Mod-Syntax: [`docs/gamedata-format.md`](docs/gamedata-format.md)
