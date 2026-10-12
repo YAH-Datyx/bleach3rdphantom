@@ -45,3 +45,6 @@ venv/
 .vscode/
 *.swp
 .DS_Store
+
+# Aus der ROM exportierte Daten (gamedata.py export)
+/gamedata/

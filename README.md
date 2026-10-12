@@ -20,6 +20,18 @@ Reverse-Engineering-Projekt zum Nintendo-DS-Spiel *Bleach: The 3rd Phantom*
 ./tools/unpack.sh          # entpackt rom/Bleach3rdPhantom.nds nach unpacked/
 ```
 
+## Spieldaten als JSON, Mods & eigene App
+
+```bash
+python3 tools/scripts/gamedata.py export            # Stats, Tower, Floors → gamedata/*.json
+python3 tools/scripts/gamedata.py apply mods/*.json # eigene Mods stapeln + validieren
+./tools/repack.sh
+```
+
+- Format und Mod-Syntax: [`docs/gamedata-format.md`](docs/gamedata-format.md)
+- Weg zur eigenen App/Engine: [`docs/app-roadmap.md`](docs/app-roadmap.md)
+- Tests (ohne ROM): `python3 -m pytest tests/`
+
 ## Verzeichnisstruktur
 
 ```
@@ -35,6 +47,9 @@ docs/               # Notizen zu Formaten, Memory-Map, Funktionen
   inventory.md      # Filesystem-Inventar
   formats/          # je ein Markdown pro identifiziertem Container
   arm9-notes.md     # RE-Funde aus Ghidra
+mods/               # eigene Mods als JSON (committet)
+gamedata/           # JSON-Export aus der ROM (gitignored)
+tests/              # Tests mit synthetischen Daten
 patches/            # *.xdelta Patches gegen Original-ROM (das ist das, was geteilt wird)
 ```
 
@@ -50,7 +65,8 @@ patches/            # *.xdelta Patches gegen Original-ROM (das ist das, was gete
   - [ ] Schadensformel-Funktion in ARM9 / Overlay finden
   - [ ] Encounter-/Map-Daten
 - [ ] **Phase 3 — Tooling**
-  - [ ] Python-Editor für Stat-Tabellen (lesen + schreiben + Repack)
+  - [x] Python-Editor für Stat-Tabellen (lesen + schreiben + Repack)
+  - [x] JSON-Export/-Import + Mod-Merge (`gamedata.py`)
   - [ ] Build-Pipeline: unpacked/ → patched.nds → xdelta gegen Original
 - [ ] **Phase 4 — Skript / Text** (für Story-Mods)
   - [ ] Text-Encoding identifizieren (Shift-JIS? Custom?)
