@@ -15,56 +15,52 @@ DST  = ROOT / "unpacked-decomp" / "data"
 
 
 def decompress_huffman(data: bytes) -> bytes:
-    """Nintendo Huffman 0x24 (4-bit) / 0x28 (8-bit) Decompressor.
-    Portiert nach DSDecmp / CUE's Nintendo Decompressor."""
+    """Nintendo Huffman 0x24 (4-bit) / 0x28 (8-bit), nach GBATEK (SWI 13h).
+
+    Baum ab data[4]: Größenbyte, dann Wurzel bei data[5]. Innerer Knoten:
+    Bits 0-5 = Offset, Bit 7/6 = Kind 0/1 ist Blatt. Das Kinder-Paar liegt bei
+    (Adresse AND NOT 1) + Offset*2 + 2, mit absoluten Adressen (data[4] ist
+    4-Byte-aligned, deshalb zählt die Parität des absoluten Offsets).
+    Bitstream: 32-Bit-LE-Wörter, MSB zuerst. 4-bit: erstes Nibble = low nibble.
+    """
     header = data[0]
     bit_size = header & 0x0F
-    if bit_size not in (4, 8):
+    if header >> 4 != 2 or bit_size not in (4, 8):
         raise ValueError(f"kein Huffman: 0x{header:02X}")
     dec_size = data[1] | (data[2] << 8) | (data[3] << 16)
-    tree_size = (data[4] + 1) << 1            # gesamte Tree-Größe in Bytes (inkl. das erste Größen-Byte)
-    tree_root = 5                              # Root-Knoten direkt nach dem Größen-Byte
-    bs_off   = 4 + tree_size                   # Bitstream beginnt nach Header + Tree
+    root = 5
+    pos = 4 + (data[4] + 1) * 2               # Bitstream nach Header + Baum
 
     out = bytearray()
-    nibble_buf = -1                            # für 4-bit-Modus
-    node = tree_root
-    bits_left = 0
-    word = 0
-    pos = bs_off
+    nibble = -1
+    node = root
     n = len(data)
-
     while len(out) < dec_size:
-        if bits_left == 0:
-            if pos + 4 > n:
-                break
-            word = struct.unpack_from("<I", data, pos)[0]
-            pos += 4
-            bits_left = 32
-        bit = (word >> 31) & 1
-        word = (word << 1) & 0xFFFFFFFF
-        bits_left -= 1
-
-        parent = data[node]
-        # Adresse des Kinder-Paares
-        next_pair = ((node - tree_root) & ~1) + (parent & 0x3F) * 2 + 2 + tree_root
-        child = next_pair + bit
-        is_leaf = (parent & (0x80 >> bit)) != 0
-        node = child
-
-        if is_leaf:
-            value = data[node]
-            if bit_size == 8:
-                out.append(value)
-            else:  # 4-bit: zwei Nibbles pro Output-Byte, low nibble zuerst
-                if nibble_buf < 0:
-                    nibble_buf = value & 0x0F
+        if pos + 4 > n:
+            raise ValueError("Bitstream zu kurz")
+        word = struct.unpack_from("<I", data, pos)[0]
+        pos += 4
+        for shift in range(31, -1, -1):
+            bit = (word >> shift) & 1
+            parent = data[node]
+            child = (node & ~1) + (parent & 0x3F) * 2 + 2 + bit
+            if child >= n:
+                raise ValueError("Baum-Index außerhalb der Daten")
+            if parent & (0x80 >> bit):
+                value = data[child]
+                node = root
+                if bit_size == 8:
+                    out.append(value)
+                elif nibble < 0:
+                    nibble = value & 0x0F
                 else:
-                    out.append((value & 0x0F) << 4 | nibble_buf)
-                    nibble_buf = -1
-            node = tree_root
-
-    return bytes(out[:dec_size])
+                    out.append((value & 0x0F) << 4 | nibble)
+                    nibble = -1
+                if len(out) >= dec_size:
+                    break
+            else:
+                node = child
+    return bytes(out)
 
 
 def try_decompress(data: bytes) -> bytes | None:
