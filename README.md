@@ -30,6 +30,7 @@ python3 tools/scripts/gamedata.py apply mods/*.json # eigene Mods stapeln + vali
 
 - Format und Mod-Syntax: [`docs/gamedata-format.md`](docs/gamedata-format.md)
 - Weg zur eigenen App/Engine: [`docs/app-roadmap.md`](docs/app-roadmap.md)
+- RE-Methoden & Übergabe der ROM: [`docs/re-methods.md`](docs/re-methods.md)
 - Tests (ohne ROM): `python3 -m pytest tests/`
 
 ## Verzeichnisstruktur
