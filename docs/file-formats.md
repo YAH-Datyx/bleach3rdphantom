@@ -38,13 +38,13 @@ inhaltlich identisch, und eine geänderte Map-Grafik kommt korrekt in der ROM an
 | `yamada/FMap/MAP###.bin` | Map-Grafik: NCGR+NCLR+NSCR (+ Sprite NCER/NANR) | ✅ → PNG | `tools/re/nitro2png.py` |
 | `yamada/NCface/nc_#####.bin` (600) | Gesichts-Porträts (NCGR+NCLR) | ✅ → PNG | nitro2png |
 | `yamada/Status/`, `kuro/nc_main/`, `kuro/nc_sub/`, `kuro/ex_p/` | Status- und Kampfbilder | ✅ → PNG | nitro2png |
-| `yamada/FPiece/` | Einheiten-Sprites auf der Map (NCER+NANR, animiert) | ⚠️ Tiles → PNG, Cells/Animation offen | nitro2png (Tiles), NitroPaint |
+| `yamada/FPiece/` | Einheiten-Sprites auf der Map (NCER+NANR, animiert) | ✅ Export, Umbau und Rückschreiben | `anim.py` (docs/animations.md) |
 | `yamada/AdvBG/` | Adventure-Hintergründe (NARC mit BG) | ✅ → PNG | nitro2png |
 | `oosawa/**.NCGR`, `evs_cp*.narc`, `sys_*.narc`, `chiba/` | Cutscenes, Menüs, Tutorials | ✅/⚠️ | nitro2png, NitroPaint/Tinke |
 | `yamada/ScrDat/map####.bin`, `adv_[se]####.bin`, `main##.bin` | **Skripte**: NARC aus `BSVE` (Bytecode + Offset-Tabelle) und `BGSM` (Nachrichten + Offset-Tabelle) | ⚠️ Container verstanden, Opcodes und Zeichentabelle offen | — |
 | `*_fre.*` | französische Variante derselben Datei (EU-ROM, EnFr) | wie oben | — |
 | `yamada/System/sys_win_moji###`, NFTR ×3 | Schriften und Glyphen, nötig für die Text-Kodierung | ⚠️ | Tinke |
-| `kuro/c#/c#.cpk`, `FPiece.cpk`, `CPanel/*.cpk` | CRI-CPK-Archive (89 Charakter-Pakete) | ⚠️ Format bekannt (CRI), Tool fehlt | z. B. CriPakTools |
+| `kuro/c#/c#.cpk`, `FPiece.cpk`, `CPanel/*.cpk` | CRI-CPK (ITOC, CRILAYLA mit genullter Signatur). In `kuro/c###`: Kampf-Animationen pro Charakter | ✅ lesen, entpacken, neu bauen | `tools/re/cpk.py`, `anim.py` |
 | `kuro/macro/M_#ST_#_TBL.bin` | Rohtabellen (Kampf-Makros?) | ❓ | — |
 | `sound/*.adx`, `sound/voice/**.ahx` | CRI ADX/AHX Musik und Stimmen | ✅ dekodierbar (vgmstream) | vgmstream |
 | `kow/effects/` | Effekt-Grafiken | ✅ → PNG | nitro2png |

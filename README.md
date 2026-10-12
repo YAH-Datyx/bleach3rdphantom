@@ -33,6 +33,7 @@ python3 tools/scripts/gamedata.py apply mods/*.json # eigene Mods stapeln + vali
 - Alle DB-Tabellen in arm9 + Aufrufer: [`docs/db-tables.md`](docs/db-tables.md)
 - Tower-Ablauf & Spawn-Logik (Ghidra): [`docs/spawn-logic.md`](docs/spawn-logic.md)
 - Alle Dateiformate (zerlegbar/änderbar): [`docs/file-formats.md`](docs/file-formats.md)
+- Animationen exportieren/umbauen/neu (inkl. Kampf-CPKs): [`docs/animations.md`](docs/animations.md)
 - RE-Methoden & Übergabe der ROM: [`docs/re-methods.md`](docs/re-methods.md)
 - Tests (ohne ROM): `python3 -m pytest tests/`
 
