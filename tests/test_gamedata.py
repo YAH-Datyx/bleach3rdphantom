@@ -115,6 +115,19 @@ def test_validate(unpacked):
     assert any("crashend" in i for i in gd.validate(data))
 
 
+def test_validate_spawn_limits(unpacked):
+    data = gd.load_rom_data(unpacked)
+    fl = data["floors"][14]
+    template = dict(fl["enemies"][0])
+    fl["enemies"] = [dict(template, char_id=154) for _ in range(70)]
+    issues = gd.validate(data)
+    assert sum("nie gespawnt" in i for i in issues) == 6
+    assert any("Aktor-Plätze" in i for i in issues)
+    for e in fl["enemies"][24:]:
+        e["wave"] = 1
+    assert not any("Aktor-Plätze" in i for i in gd.validate(data))
+
+
 def test_cli_export_apply(unpacked, tmp_path):
     out = tmp_path / "json"
     assert gd.main(["--unpacked", str(unpacked), "export", "--out", str(out)]) == 0

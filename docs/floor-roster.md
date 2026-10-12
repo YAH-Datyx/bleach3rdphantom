@@ -80,6 +80,7 @@ Sub-File 0, groß (~6.9 KB). Bis zu 128+ Slots, viele leer.
 | 0x0A | u16 grid_y | Tile-Position Y |
 | 0x0C | u16 | meist 2 |
 | 0x0E | u16 team | 1 = Standard-Gegner, 10/11 = Boss-Team |
+| 0x10 | s16 **wave** | Spawn-Gruppe, nur 0 spawnt beim Start (siehe `spawn-logic.md`) |
 | ... | ... | restliche Felder oft 0; gelegentlich items/skills bei +0x12 |
 
 Leerer Slot = alle Bytes nach `[0:4]` sind 0.

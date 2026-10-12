@@ -47,10 +47,15 @@ STAT_FIELDS = {
     "items": (0x1A, "<10H"), "skills": (0x30, "<10H"),
 }
 DPOS_FIELDS = {
+    # instance_id = 2 Bytes: low = Eintrags-Index, high = Art (3 = Gegner, 5 = Sonder-Spawn)
     "instance_id": (0x00, "<H"), "char_id": (0x02, "<H"), "level": (0x04, "<H"),
     "ai_mode": (0x06, "<H"), "x": (0x08, "<H"), "y": (0x0A, "<H"),
     "team": (0x0E, "<H"),
+    "wave": (0x10, "<h"),  # Spawn-Gruppe: Tower-Start spawnt nur 0 (docs/spawn-logic.md)
 }
+DPOS_MAX_READ = 64     # Spawn-Schleife liest nur die ersten 64 Einträge
+ACTOR_SLOTS = 32       # alle Figuren zusammen; die Party belegt davon bis zu 8
+PARTY_SLOTS = 8
 PARTY_FIELDS = {
     "type": (0x00, "<H"), "level": (0x02, "<H"), "char_id": (0x04, "<H"),
     "slot": (0x0A, "<H"),
@@ -269,6 +274,12 @@ def validate(data: dict) -> list[str]:
                 issues.append(f"{where} ist in der Stat-Tabelle leer (HP/Level 0)")
             if cid in partner_ids:
                 issues.append(f"{where} ist gleichzeitig Partner auf diesem Floor (Crash)")
+            if i >= DPOS_MAX_READ:
+                issues.append(f"{where} liegt hinter Slot {DPOS_MAX_READ - 1} und wird nie gespawnt")
+        wave0 = sum(1 for e in fl["enemies"][:DPOS_MAX_READ] if e["char_id"] and e["wave"] == 0)
+        if wave0 > ACTOR_SLOTS - PARTY_SLOTS:
+            issues.append(f"Floor {f}: {wave0} Gegner in Welle 0, aber nur {ACTOR_SLOTS} Aktor-Plätze "
+                          f"(davon bis zu {PARTY_SLOTS} Party) — der Rest erscheint nicht")
     return issues
 
 
