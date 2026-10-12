@@ -9,12 +9,12 @@ Zwei Stat-Tabellen liegen direkt in `arm9.bin` (kein Overlay):
 | Tabelle | Offset | Quelle (Source) | Einträge |
 |---|---|---|---|
 | Story-Mode | `0xfd882` – `0x101e3c` | `data/yamada/DataBase/db_status.inc` | 255, danach `FF FF FF FF` |
-| VS-Mode    | **noch nicht gefunden** | `data/yamada/DataBase/db_VSstatus.inc` | ? |
+| VS-Mode    | `0x11a938` | `data/yamada/DataBase/db_VSstatus.inc` | 37 (IDs nicht fortlaufend), Terminator `FF FF` |
 
 > **Korrektur (an der ROM verifiziert):** Das früher notierte VS-Offset `0xffc56`
 > liegt mitten in der Story-Tabelle (Eintrag 132 beginnt bei `0xffc54`). In
-> `arm9.bin` gibt es keine zweite Tabelle mit gleichem Layout. Die VS-Werte
-> liegen also woanders (Overlay?) oder anders aufgebaut.
+> Die echte VS-Tabelle liegt bei `0x11a938`. Alle Tabellen stehen in
+> [`db-tables.md`](db-tables.md).
 
 Struct-Größe: **70 Bytes (0x46)** pro Charakter.
 
@@ -72,7 +72,7 @@ Beispiel — Charakter #3, HP von 433 → 9999:
 | Offset | Inhalt | Doc |
 |---|---|---|
 | `0xfd882` | Story-Mode Stats (255 × 70 Bytes) | hier |
-| `0xffc56` | VS-Mode Stats | hier |
+| `0x11a938` | VS-Mode Stats (37 Einträge) | hier |
 | **`0xf3b58`** | **Tower-of-Souls Floor-Tabelle** (30 × 6 Bytes) | siehe `floor-roster.md` |
 
 ## Stat-Skalierung in-game

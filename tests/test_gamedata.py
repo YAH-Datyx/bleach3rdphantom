@@ -16,7 +16,7 @@ import gamedata as gd
 def unpacked(tmp_path):
     tmp_path = tmp_path / "unpacked"
     tmp_path.mkdir()
-    arm9 = bytearray(0x110000)
+    arm9 = bytearray(0x120000)
     off = gd.STAT_TABLES["characters"][0]
     for i in range(255):
         o = off + i * gd.STAT_ENTRY
@@ -24,6 +24,10 @@ def unpacked(tmp_path):
         struct.pack_into("<HHBBBBHH4B", arm9, o, i or 1, i + 1, 1, 1, 2, 10, 500 + i, 50, 20, 21, 22, 23)
         arm9[o + 0x10] = 3  # unbekanntes Byte, muss erhalten bleiben
     struct.pack_into("<HH", arm9, off + 255 * gd.STAT_ENTRY, 0xFFFF, 0xFFFF)
+    vs = gd.STAT_TABLES["characters_vs"][0]
+    for i, cid in enumerate((1, 3, 7)):  # VS-IDs sind nicht fortlaufend
+        struct.pack_into("<HHBBBBHH", arm9, vs + i * gd.STAT_ENTRY, cid, cid, 1, 1, cid, 10, 600, 25)
+    struct.pack_into("<H", arm9, vs + 3 * gd.STAT_ENTRY, 0xFFFF)
     for i in range(gd.TOWER_COUNT):
         struct.pack_into("<3H", arm9, gd.TOWER_OFFSET + i * 6, i + 1, i + 2, i + 1)
     (tmp_path / "arm9.bin").write_bytes(arm9)
@@ -67,6 +71,7 @@ def test_export_contents(unpacked):
     data = gd.load_rom_data(unpacked)
     assert len(data["characters"]) == 255
     assert data["characters"][1]["model"] == 1 and data["characters"][1]["id"] == 2
+    assert [e["id"] for e in data["characters_vs"]] == [1, 3, 7]
     assert data["characters"][0]["hp"] == 500
     assert data["tower"][6] == {"floor": 7, "map_id": 8, "floor_echo": 7}
     assert sorted(data["floors"]) == [9, 14]
@@ -79,11 +84,12 @@ def test_apply_mod_and_conflicts(unpacked):
     gd.apply_mod(data, {"name": "a", "characters": {"254": {"hp": 9999}},
                         "floors": {"9": {"enemies": {"0": {"char_id": 181}}}}}, owners, log)
     gd.apply_mod(data, {"name": "b", "characters": {"254": {"hp": 1234}},
-                        "tower": {"7": {"map_id": 31}}}, owners, log)
+                        "tower": {"7": {"map_id": 31}}, "characters_vs": {"7": {"hp": 777}}}, owners, log)
     gd.save_rom_data(unpacked, data)
     again = gd.load_rom_data(unpacked)
     assert again["characters"][253]["hp"] == 1234
     assert again["tower"][6]["map_id"] == 31
+    assert again["characters_vs"][2]["hp"] == 777
     assert again["floors"][9]["enemies"][0]["char_id"] == 181
     assert len(log) == 1 and "KONFLIKT" in log[0]
 
@@ -91,6 +97,7 @@ def test_apply_mod_and_conflicts(unpacked):
 @pytest.mark.parametrize("mod", [
     {"characters": {"254": {"bogus": 1}}},
     {"characters": {"254": {"_raw": "00"}}},
+    {"characters_vs": {"2": {"hp": 1}}},
     {"floors": {"9": {"enemies": {"99": {"level": 1}}}}},
     {"floors": {"3": {}}},
 ])

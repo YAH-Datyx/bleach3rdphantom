@@ -22,6 +22,7 @@ Mods (`mods/*.json`), denn die enthalten ausschließlich deine eigenen Änderung
 | Datei | Quelle | Inhalt |
 |---|---|---|
 | `characters.json` | `arm9.bin @ 0xfd882` | Story-Stats, 70 Byte/Eintrag (siehe `arm9-stats.md`) |
+| `characters_vs.json` | `arm9.bin @ 0x11a938` | VS-Stats, 37 Einträge, gleiches Layout; Mods adressieren per Char-ID |
 | `tower.json` | `arm9.bin @ 0xf3b58` | 30 Floors: `floor`, `map_id`, `floor_echo` |
 | `floors/floor_XX.json` | `db_dpos_9XX.narc` + `db_party_9XX.narc` | `enemies[]` (54 B) + `partners[]` (14 B) |
 
@@ -50,6 +51,7 @@ und in Mods auf.
 {
   "name": "Mein Mod",
   "characters":    {"254": {"hp": 9999, "atk": 99}},
+  "characters_vs": {"3": {"hp": 5000}},
   "tower":   {"7": {"map_id": 31}},
   "floors":  {"9": {"enemies":  {"3": {"char_id": 181, "level": 80}},
                     "partners": {"0": {"level": 50}}}}

@@ -23,10 +23,10 @@ ROOT = Path(__file__).resolve().parents[2]
 UNPACKED = ROOT / "unpacked"
 
 STAT_TABLES = {
-    # name: (offset in arm9.bin, max. Einträge). Die früher notierte VS-Tabelle
-    # @ 0xffc56 liegt mitten in dieser Tabelle (Eintrag 132 + 2) — die echte ist
-    # noch nicht gefunden, siehe docs/arm9-stats.md.
-    "characters": (0xfd882, 255),
+    # name: (offset in arm9.bin, max. Einträge); beide enden mit model == 0xFFFF.
+    # Das früher notierte VS-Offset 0xffc56 lag mitten in der Story-Tabelle.
+    "characters":    (0xfd882, 255),   # db_status.inc
+    "characters_vs": (0x11a938, 37),   # db_VSstatus.inc, IDs nicht fortlaufend
 }
 STAT_ENTRY = 0x46
 TOWER_OFFSET = 0xf3b58
@@ -100,7 +100,7 @@ def read_stat_table(arm9: bytes, offset: int, maxcount: int) -> list[dict]:
         if off + STAT_ENTRY > len(arm9):
             break
         e = unpack_struct(arm9[off:off + STAT_ENTRY], STAT_FIELDS)
-        if e["id"] != i + 1:  # Tabellenende (FF FF)
+        if e["model"] == 0xFFFF:  # Terminator, wie ihn die Lookup-Funktionen prüfen
             break
         out.append(e)
     return out
@@ -206,6 +206,7 @@ def load_json(src: Path) -> dict:
 # {
 #   "name": "Mein Mod",
 #   "characters":    {"254": {"hp": 9999, "atk": 99}},
+#   "characters_vs": {"3": {"hp": 5000}},
 #   "tower":   {"7": {"map_id": 31}},
 #   "floors":  {"9": {"enemies":  {"3": {"char_id": 181, "level": 80}},
 #                     "partners": {"0": {"level": 50}}}}
@@ -228,11 +229,11 @@ def _patch(target: dict, changes: dict, path: str, owners: dict, mod: str, log: 
 def apply_mod(data: dict, mod: dict, owners: dict, log: list) -> None:
     name = mod.get("name", "?")
     for table in STAT_TABLES:
+        by_id = {e["id"]: e for e in data[table]}
         for cid, changes in mod.get(table, {}).items():
-            idx = int(cid) - 1
-            if not 0 <= idx < len(data[table]):
+            if int(cid) not in by_id:
                 raise ValueError(f"{name}: {table} ID {cid} existiert nicht")
-            _patch(data[table][idx], changes, f"{table}[{cid}]", owners, name, log)
+            _patch(by_id[int(cid)], changes, f"{table}[{cid}]", owners, name, log)
     for floor, changes in mod.get("tower", {}).items():
         _patch(data["tower"][int(floor) - 1], changes, f"tower[{floor}]", owners, name, log)
     for floor, fmod in mod.get("floors", {}).items():
@@ -294,7 +295,8 @@ def main(argv: list[str] | None = None) -> int:
     if a.cmd == "export":
         data = load_rom_data(a.unpacked)
         dump_json(data, a.out)
-        print(f"{len(data['characters'])} Chars, {len(data['floors'])} Floors → {a.out}")
+        print(f"{len(data['characters'])} Chars, {len(data['characters_vs'])} VS-Chars, "
+              f"{len(data['floors'])} Floors → {a.out}")
     elif a.cmd == "import":
         save_rom_data(a.unpacked, load_json(a.src))
         print(f"{a.src} → {a.unpacked}")
