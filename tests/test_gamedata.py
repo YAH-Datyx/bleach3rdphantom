@@ -17,12 +17,13 @@ def unpacked(tmp_path):
     tmp_path = tmp_path / "unpacked"
     tmp_path.mkdir()
     arm9 = bytearray(0x110000)
-    for name, (off, _) in gd.STAT_TABLES.items():
-        count = 255 if name == "characters" else 10
-        for i in range(count):
-            o = off + i * gd.STAT_ENTRY
-            struct.pack_into("<HHBBBBHH4B", arm9, o, i + 1, i + 1, 1, 1, 2, 10, 500 + i, 50, 20, 21, 22, 23)
-            arm9[o + 0x10] = 3  # unbekanntes Byte, muss erhalten bleiben
+    off = gd.STAT_TABLES["characters"][0]
+    for i in range(255):
+        o = off + i * gd.STAT_ENTRY
+        # model (0x00) weicht teils von der ID (0x02) ab, wie im echten ROM bei Eintrag 6
+        struct.pack_into("<HHBBBBHH4B", arm9, o, i or 1, i + 1, 1, 1, 2, 10, 500 + i, 50, 20, 21, 22, 23)
+        arm9[o + 0x10] = 3  # unbekanntes Byte, muss erhalten bleiben
+    struct.pack_into("<HH", arm9, off + 255 * gd.STAT_ENTRY, 0xFFFF, 0xFFFF)
     for i in range(gd.TOWER_COUNT):
         struct.pack_into("<3H", arm9, gd.TOWER_OFFSET + i * 6, i + 1, i + 2, i + 1)
     (tmp_path / "arm9.bin").write_bytes(arm9)
@@ -45,6 +46,15 @@ def snapshot(root):
     return {p.relative_to(root): p.read_bytes() for p in root.rglob("*") if p.is_file()}
 
 
+def test_import_unchanged_keeps_narc_files_untouched(unpacked, tmp_path):
+    # ndspy würde den NARC-Header anders padden — unveränderte Dateien bleiben unberührt
+    p = gd.dpos_path(unpacked, 9)
+    p.write_bytes(p.read_bytes() + b"\0" * 4)
+    before = p.read_bytes()
+    gd.save_rom_data(unpacked, gd.load_rom_data(unpacked))
+    assert p.read_bytes() == before
+
+
 def test_roundtrip_is_byte_identical(unpacked, tmp_path):
     before = snapshot(unpacked)
     out = tmp_path / "json"
@@ -56,7 +66,7 @@ def test_roundtrip_is_byte_identical(unpacked, tmp_path):
 def test_export_contents(unpacked):
     data = gd.load_rom_data(unpacked)
     assert len(data["characters"]) == 255
-    assert len(data["characters_vs"]) == 10  # Ende per ID-Mismatch erkannt
+    assert data["characters"][1]["model"] == 1 and data["characters"][1]["id"] == 2
     assert data["characters"][0]["hp"] == 500
     assert data["tower"][6] == {"floor": 7, "map_id": 8, "floor_echo": 7}
     assert sorted(data["floors"]) == [9, 14]

@@ -102,6 +102,10 @@ Soi Fon-Beispiel: Lv 28, displayed HP 533. Wenn Base-Tabelle alle IDs mit HP=987
 
 ## Bekannt kaputte / instabile IDs
 
+> **Hinweis aus dem ROM-Export:** 145, 146 und 147 stehen in vielen Floors
+> (3, 8, 9, 22–27) als Gegner. Sie crashen also vermutlich nur in bestimmten
+> Kontexten, z. B. wenn sie außerhalb ihres Original-Floors gespawnt werden.
+
 Diese verursachen Crash beim Spawnen (vermutlich Filler-Slots ohne komplette Sprite/Animation/Stats):
 
 `30, 90, 100, 110, 145, 146, 147, 150, 170, 175, 193, 195`

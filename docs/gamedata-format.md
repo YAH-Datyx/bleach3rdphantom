@@ -6,7 +6,7 @@ das Zusammenführen mit anderen Projekten und für eine spätere eigene Engine
 (siehe [`app-roadmap.md`](app-roadmap.md)).
 
 ```bash
-./tools/unpack.sh                                   # ROM → unpacked/
+./tools/unpack.sh   # oder: python3 tools/scripts/unpack_rom.py (ohne ndstool)
 python3 tools/scripts/gamedata.py export            # unpacked/ → gamedata/*.json
 python3 tools/scripts/gamedata.py import            # gamedata/*.json → unpacked/
 python3 tools/scripts/gamedata.py apply mods/a.json mods/b.json   # Mods stapeln
@@ -22,9 +22,12 @@ Mods (`mods/*.json`), denn die enthalten ausschließlich deine eigenen Änderung
 | Datei | Quelle | Inhalt |
 |---|---|---|
 | `characters.json` | `arm9.bin @ 0xfd882` | Story-Stats, 70 Byte/Eintrag (siehe `arm9-stats.md`) |
-| `characters_vs.json` | `arm9.bin @ 0xffc56` | VS-Stats; endet am ersten Eintrag mit `id != index+1` |
 | `tower.json` | `arm9.bin @ 0xf3b58` | 30 Floors: `floor`, `map_id`, `floor_echo` |
 | `floors/floor_XX.json` | `db_dpos_9XX.narc` + `db_party_9XX.narc` | `enemies[]` (54 B) + `partners[]` (14 B) |
+
+`export → import` ist gegen die echte ROM (YBTP) verifiziert: `arm9.bin` und alle
+NARCs bleiben byte-identisch. Unveränderte NARCs werden gar nicht neu
+geschrieben, weil ndspy beim Speichern anders paddet.
 
 Jeder Eintrag enthält die benannten Felder **und** `_raw` (Hex aller Bytes).
 Beim Import wird `_raw` als Basis genommen, die benannten Felder werden darüber
@@ -33,7 +36,7 @@ geschrieben. Noch unbekannte Bytes bleiben also unverändert, und
 
 Felder pro Typ:
 
-- **Character:** `id sprite flag1 flag2 type level hp mp atk def spd mag items[10] skills[10]`
+- **Character:** `model id flag1 flag2 type level hp mp atk def spd mag items[10] skills[10]`
 - **Enemy-Slot:** `instance_id char_id level ai_mode x y team`
 - **Partner:** `type level char_id slot`
 
@@ -47,7 +50,6 @@ und in Mods auf.
 {
   "name": "Mein Mod",
   "characters":    {"254": {"hp": 9999, "atk": 99}},
-  "characters_vs": {"254": {"hp": 5000}},
   "tower":   {"7": {"map_id": 31}},
   "floors":  {"9": {"enemies":  {"3": {"char_id": 181, "level": 80}},
                     "partners": {"0": {"level": 50}}}}
@@ -61,5 +63,5 @@ und in Mods auf.
   Feld auf unterschiedliche Werte, gewinnt der spätere, und es wird eine
   `KONFLIKT`-Zeile ausgegeben.
 - Nach dem Anwenden läuft automatisch `validate`. Geprüft werden bekannte
-  Crash-IDs, in der Stat-Tabelle inaktive Chars und Chars, die auf demselben
+  Crash-IDs, leere Stat-Einträge (HP und Level 0) und Chars, die auf demselben
   Floor zugleich Partner und Gegner sind.

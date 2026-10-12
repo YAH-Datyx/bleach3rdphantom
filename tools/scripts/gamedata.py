@@ -23,9 +23,10 @@ ROOT = Path(__file__).resolve().parents[2]
 UNPACKED = ROOT / "unpacked"
 
 STAT_TABLES = {
-    # name: (offset in arm9.bin, max. Einträge)
-    "characters":    (0xfd882, 255),
-    "characters_vs": (0xffc56, 255),
+    # name: (offset in arm9.bin, max. Einträge). Die früher notierte VS-Tabelle
+    # @ 0xffc56 liegt mitten in dieser Tabelle (Eintrag 132 + 2) — die echte ist
+    # noch nicht gefunden, siehe docs/arm9-stats.md.
+    "characters": (0xfd882, 255),
 }
 STAT_ENTRY = 0x46
 TOWER_OFFSET = 0xf3b58
@@ -39,7 +40,7 @@ BROKEN_IDS = {30, 90, 100, 110, 145, 146, 147, 150, 170, 175, 193, 195}
 
 # name: (offset, struct-format) — alles andere bleibt in _raw erhalten
 STAT_FIELDS = {
-    "id": (0x00, "<H"), "sprite": (0x02, "<H"), "flag1": (0x04, "<B"),
+    "model": (0x00, "<H"), "id": (0x02, "<H"), "flag1": (0x04, "<B"),
     "flag2": (0x05, "<B"), "type": (0x06, "<B"), "level": (0x07, "<B"),
     "hp": (0x08, "<H"), "mp": (0x0A, "<H"), "atk": (0x0C, "<B"),
     "def": (0x0D, "<B"), "spd": (0x0E, "<B"), "mag": (0x0F, "<B"),
@@ -99,7 +100,7 @@ def read_stat_table(arm9: bytes, offset: int, maxcount: int) -> list[dict]:
         if off + STAT_ENTRY > len(arm9):
             break
         e = unpack_struct(arm9[off:off + STAT_ENTRY], STAT_FIELDS)
-        if e["id"] != i + 1:  # Tabellenende (z. B. VS-Tabelle kürzer)
+        if e["id"] != i + 1:  # Tabellenende (FF FF)
             break
         out.append(e)
     return out
@@ -144,13 +145,17 @@ def write_floor(unpacked: Path, fl: dict) -> None:
     dp, pp = dpos_path(unpacked, floor), party_path(unpacked, floor)
     dpos = ndspy.narc.NARC.fromFile(str(dp))
     party = ndspy.narc.NARC.fromFile(str(pp))
-    dpos.files[0] = (b"".join(pack_struct(e, DPOS_FIELDS, DPOS_ENTRY) for e in fl["enemies"])
-                     + bytes.fromhex(fl.get("_dpos_tail", "")))
-    party.files[0] = (bytes.fromhex(fl.get("_party_header", "01000000"))
-                      + b"".join(pack_struct(e, PARTY_FIELDS, PARTY_ENTRY) for e in fl["partners"])
-                      + bytes.fromhex(fl.get("_party_tail", "")))
-    dpos.saveToFile(str(dp))
-    party.saveToFile(str(pp))
+    new_d = (b"".join(pack_struct(e, DPOS_FIELDS, DPOS_ENTRY) for e in fl["enemies"])
+             + bytes.fromhex(fl.get("_dpos_tail", "")))
+    new_p = (bytes.fromhex(fl.get("_party_header", "01000000"))
+             + b"".join(pack_struct(e, PARTY_FIELDS, PARTY_ENTRY) for e in fl["partners"])
+             + bytes.fromhex(fl.get("_party_tail", "")))
+    # Nur geänderte NARCs neu schreiben: ndspy padded den Header anders als das
+    # Original, ein unnötiges Speichern würde die Datei verändern.
+    for narc, path, new in ((dpos, dp, new_d), (party, pp, new_p)):
+        if narc.files[0] != new:
+            narc.files[0] = new
+            narc.saveToFile(str(path))
 
 
 def load_rom_data(unpacked: Path) -> dict:
@@ -201,7 +206,6 @@ def load_json(src: Path) -> dict:
 # {
 #   "name": "Mein Mod",
 #   "characters":    {"254": {"hp": 9999, "atk": 99}},
-#   "characters_vs": {"254": {"hp": 5000}},
 #   "tower":   {"7": {"map_id": 31}},
 #   "floors":  {"9": {"enemies":  {"3": {"char_id": 181, "level": 80}},
 #                     "partners": {"0": {"level": 50}}}}
@@ -249,7 +253,8 @@ def apply_mod(data: dict, mod: dict, owners: dict, log: list) -> None:
 def validate(data: dict) -> list[str]:
     """Prüft auf die bekannten Crash-Ursachen aus docs/session-findings.md."""
     issues = []
-    active = {e["id"] for e in data["characters"] if e["flag1"]}
+    # flag1 ist eine Kategorie (6 z. B. bei Hollows), kein Aktiv-Flag — leer heißt HP und Level 0
+    active = {e["id"] for e in data["characters"] if e["hp"] or e["level"]}
     for f, fl in sorted(data["floors"].items()):
         partner_ids = {p["char_id"] for p in fl["partners"] if p["type"] == 10}
         for i, e in enumerate(fl["enemies"]):
@@ -260,7 +265,7 @@ def validate(data: dict) -> list[str]:
             if cid in BROKEN_IDS:
                 issues.append(f"{where} ist als crashend bekannt")
             elif cid not in active:
-                issues.append(f"{where} ist in der Stat-Tabelle inaktiv")
+                issues.append(f"{where} ist in der Stat-Tabelle leer (HP/Level 0)")
             if cid in partner_ids:
                 issues.append(f"{where} ist gleichzeitig Partner auf diesem Floor (Crash)")
     return issues
@@ -289,8 +294,7 @@ def main(argv: list[str] | None = None) -> int:
     if a.cmd == "export":
         data = load_rom_data(a.unpacked)
         dump_json(data, a.out)
-        print(f"{len(data['characters'])} Chars, {len(data['characters_vs'])} VS-Chars, "
-              f"{len(data['floors'])} Floors → {a.out}")
+        print(f"{len(data['characters'])} Chars, {len(data['floors'])} Floors → {a.out}")
     elif a.cmd == "import":
         save_rom_data(a.unpacked, load_json(a.src))
         print(f"{a.src} → {a.unpacked}")
