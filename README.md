@@ -1,97 +1,43 @@
-# Bleach: The 3rd Phantom — Reverse Engineering / Romhack
+# Bleach: The 3rd Phantom — RE-Toolkit & Mods
 
-Reverse-Engineering-Projekt zum Nintendo-DS-Spiel *Bleach: The 3rd Phantom*
-(Sega / Tom Create, 2009) mit dem Ziel, Gameplay-Modifikationen
-(Stats, Schadensformeln, Story-Skript, Items) vornehmen zu können.
+Werkzeuge, Doku und Mods zum NDS-Spiel *Bleach: The 3rd Phantom* (EU, YBTP).
+Das **Hauptprojekt** (eigene Browser-Engine) liegt in
+[YAH-Datyx/Bleach3P-](https://github.com/YAH-Datyx/Bleach3P-). Die Funde aus
+diesem Repo stehen dort gesammelt in `docs/wissen-re-toolkit.md`, die Tools
+unter `tools/s2/`.
 
-> **Rechtlich:** Dieses Repo enthält **keine** ROM-Daten, keine extrahierten
-> Assets und keinen Originalcode des Spiels. Es enthält ausschließlich
-> selbst geschriebene Tools, Skripte, Doku und Patches (Diffs).
-> Die ROM musst du legal aus deinem eigenen Cartridge dumpen und unter
-> `rom/Bleach3rdPhantom.nds` ablegen (wird von `.gitignore` ignoriert).
+> **Rechtlich:** keine ROM-Daten und keine extrahierten Assets im Repo. Die
+> eigene ROM gehört nach `rom/Bleach3rdPhantom.nds` (gitignored).
 
-## Setup
+## Ordner
 
-**Windows-User:** siehe [`docs/windows-setup.md`](docs/windows-setup.md) für die WSL2-Einrichtung.
+```
+apps/            Quellcode der Artifacts (Seelenturm, Taschenkonsole)   → apps/README.md
+docs/            Doku, Inhaltsverzeichnis                                → docs/README.md
+mods/            eigene Mods als JSON (Fix-Mod, Beispiel)
+tests/           pytest (synthetisch; ROM-Tests laufen nur mit entpackter ROM)
+tools/scripts/   Spieldaten, Huffman, ROM-Build, Mod-Build (Python, ndspy)
+tools/re/        Reverse Engineering: DB-Tabellen, NCER/NANR, CPK, Ghidra
+tools/*.sh       ältere Shell-Helfer (ndstool-Weg)
 
-**Linux/WSL/macOS:**
-```bash
-./tools/setup.sh           # installiert ndstool, dsdecmp, ARM-Toolchain, Python-Deps
-./tools/unpack.sh          # entpackt rom/Bleach3rdPhantom.nds nach unpacked/
+gitignored, aus der eigenen ROM erzeugt:
+rom/ unpacked/ unpacked-decomp/ gamedata/ build/
 ```
 
-## Mit Mods im Emulator spielen (Handy & PC)
-
-```bash
-python3 tools/scripts/make_mod.py mods/*.json   # → build/Bleach3rdPhantom.mod.nds + .xdelta
-```
-
-Emulatoren, Patchen auf dem Handy und Spielstand: [`docs/emulator-setup.md`](docs/emulator-setup.md)
-
-## Spieldaten als JSON, Mods & eigene App
+## Schnellstart
 
 ```bash
-python3 tools/scripts/gamedata.py export            # Stats, Tower, Floors → gamedata/*.json
-python3 tools/scripts/gamedata.py apply mods/*.json # eigene Mods stapeln + validieren
-./tools/repack.sh            # oder ohne ndstool: python3 tools/scripts/build_rom.py
+pip install ndspy pillow capstone pytest
+python3 tools/scripts/unpack_rom.py rom/Bleach3rdPhantom.nds unpacked
+python3 tools/scripts/decompress.py                    # Huffman → unpacked-decomp/
+python3 tools/scripts/gamedata.py export               # Spieldaten → gamedata/*.json
+python3 tools/scripts/gamedata.py validate             # bekannte Crash-Ursachen
+python3 tools/scripts/make_mod.py mods/fix-partner-conflicts.json   # → build/*.nds + .xdelta
+python3 -m pytest tests/
 ```
 
-- Format und Mod-Syntax: [`docs/gamedata-format.md`](docs/gamedata-format.md)
-- Weg zur eigenen App/Engine: [`docs/app-roadmap.md`](docs/app-roadmap.md)
-- Alle DB-Tabellen in arm9 + Aufrufer: [`docs/db-tables.md`](docs/db-tables.md)
-- Tower-Ablauf & Spawn-Logik (Ghidra): [`docs/spawn-logic.md`](docs/spawn-logic.md)
-- Alle Dateiformate (zerlegbar/änderbar): [`docs/file-formats.md`](docs/file-formats.md)
-- Animationen exportieren/umbauen/neu (inkl. Kampf-CPKs): [`docs/animations.md`](docs/animations.md)
-- RE-Methoden & Übergabe der ROM: [`docs/re-methods.md`](docs/re-methods.md)
-- Tests (ohne ROM): `python3 -m pytest tests/`
-
-## Verzeichnisstruktur
-
-```
-rom/                # Original-ROM (gitignored)
-unpacked/           # ndstool -x Output: arm9.bin, arm7.bin, overlays, data/ (gitignored)
-build/              # gepatchte ROM (gitignored)
-tools/              # Setup + Hilfsskripte (committet)
-  setup.sh
-  unpack.sh
-  repack.sh
-  scripts/          # Python-Parser für Custom-Formate
-docs/               # Notizen zu Formaten, Memory-Map, Funktionen
-  inventory.md      # Filesystem-Inventar
-  formats/          # je ein Markdown pro identifiziertem Container
-  arm9-notes.md     # RE-Funde aus Ghidra
-mods/               # eigene Mods als JSON (committet)
-gamedata/           # JSON-Export aus der ROM (gitignored)
-tests/              # Tests mit synthetischen Daten
-patches/            # *.xdelta Patches gegen Original-ROM (das ist das, was geteilt wird)
-```
-
-## Roadmap (Gameplay-Mod-Fokus)
-
-- [ ] **Phase 1 — Aufbruch**
-  - [ ] ROM mit `ndstool -x` entpacken, Filesystem-Inventar erstellen
-  - [ ] Container automatisch klassifizieren (NARC/CARC/LZ/Huff/Raw)
-  - [ ] DeSmuME mit GDB-Stub zum Laufen bringen
-- [ ] **Phase 2 — Daten-Tabellen finden** (für Romhacks meist 80 % des Wertes)
-  - [ ] Charakter-Stat-Tabelle lokalisieren (Cheat-Engine-Stil: Wert im RAM finden → Backreference zur ROM-Adresse)
-  - [ ] Item-/Skill-Tabelle
-  - [ ] Schadensformel-Funktion in ARM9 / Overlay finden
-  - [ ] Encounter-/Map-Daten
-- [ ] **Phase 3 — Tooling**
-  - [x] Python-Editor für Stat-Tabellen (lesen + schreiben + Repack)
-  - [x] JSON-Export/-Import + Mod-Merge (`gamedata.py`)
-  - [ ] Build-Pipeline: unpacked/ → patched.nds → xdelta gegen Original
-- [ ] **Phase 4 — Skript / Text** (für Story-Mods)
-  - [ ] Text-Encoding identifizieren (Shift-JIS? Custom?)
-  - [ ] NFTR-Schriftarten dumpen / Glyph-Mapping
-  - [ ] Skript-Container parsen, Round-Trip (Dump → Edit → Reinject)
-
-## Workflow für eine Änderung
-
-1. Im RAM den Wert finden (DeSmuME RAM-Search), den du ändern willst.
-2. Memory-Breakpoint setzen, In-Game den Wert triggern (Kampf etc.).
-3. Aus der ARM9-Adresse im Disassembly (Ghidra) die Funktion identifizieren.
-4. Datenquelle zurückverfolgen → ROM-Offset bestimmen.
-5. Patch schreiben (binär oder via Python-Skript), `repack.sh` ausführen.
-6. Testen in DeSmuME, dann `xdelta3` Patch gegen Original generieren → `patches/`.
-```
+## Wichtigste Funde (Details in `docs/`)
+- Das Spiel liest **keine `.inc`-Dateien**, nur die Binärtabellen in arm9 ([db-tables.md](docs/db-tables.md)).
+- Spawn: nur Welle 0 beim Start, höchstens 32 Aktoren, nur 64 dpos-Slots ([spawn-logic.md](docs/spawn-logic.md)).
+- Partner = Gegner auf derselben Etage führt zum Crash. Etage 7 ist noch offen.
+- Huffman-Encoder, NCER/NANR- und CPK-Writer: alle Dateien der ROM round-trip-getestet ([file-formats.md](docs/file-formats.md)).
