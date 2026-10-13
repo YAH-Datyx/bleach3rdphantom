@@ -1,0 +1,48 @@
+# Eigene Benennungen (Adresse Name [func]), Quelle: docs/wissen-*.md im Repo Bleach3P-
+# arm9 – Laufzeit
+0x0203D2C4 Random func
+0x02020450 f_from_int func
+0x02020498 f_from_uint func
+0x0201F8AC f_add func
+0x020204E0 f_mul func
+0x0202041C f_to_int func
+# arm9 – DB-Getter
+0x02056E0C CharIdToModel func
+0x02056E58 GetStatus func
+0x02056E94 GetGrowt func
+0x02056EC8 GetSkill func
+0x02056EFC GetAbility func
+0x02056F30 GetPartner func
+0x02056F64 GetFPartner func
+0x02056F98 GetMatching func
+0x02057040 GetAbilitySelection func
+0x02057078 GetResult func
+0x020570AC GetFBattle func
+0x020570E4 GetBTower func
+# arm9 – Kampf
+0x020586D0 AddExpLevelUp func
+0x020599B4 AttrRelation func
+0x02059A30 CalcDamage func
+0x02059C78 CalcTeamDamage func
+0x0205A0A4 CalcSkillDamage func
+0x0205A5E8 CalcSkillHeal func
+0x0205A8D0 CalcHitRate func
+0x0205AAC8 CalcSubAttack func
+0x0205B280 ResolveExchange func
+# arm9 – Tabellen
+0x020F3948 tbl_AttrMult
+0x020F3968 tbl_ExtraChance
+0x020F3A20 tbl_PressureMult
+0x020F3A74 tbl_Reishi
+0x020F3AE4 tbl_matching
+0x020F3B58 tbl_btower
+0x020F3DEC tbl_fbattle
+0x020F4488 tbl_f_partner
+0x020F4998 tbl_result
+0x020F55D0 tbl_ability_selection
+0x020F6B90 tbl_skill
+0x020FAC3C tbl_partner
+0x020FD882 tbl_status
+0x02101E84 tbl_growt
+0x02106D7C tbl_ability
+0x0211A938 tbl_vsstatus
