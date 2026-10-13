@@ -86,10 +86,14 @@ Konsolenausgabe bei Sonderzeichen).
 | **Turm-Belohnungen** (db_result-Zwilling) | `0xF8998 + (floor-1)*68` | 68 B |
 | **Btower** (Etage→Map/Difficulty) | `0xF7B58 + (floor-1)*6` | 6 B: `{floor, difficulty, dposRef}` |
 
-**Offen:** `REPORT.md` nennt für Btower `0xf3b58`, empirisch liefert aber
-nur **`0xF7B58`** sinnvolle Werte (`{11,33,11}, {12,31,12}, {13,25,13}…`,
-exakt die dokumentierten Difficulty-Werte). Bitte klären, welche der beiden
-der Editor benutzt.
+**GEKLÄRT (2026-10-13):** `REPORT.md` nennt `0xf3b58`, wir lesen bei
+`0xF7B58` — **beides ist korrekt**, nur zwei Bezugssysteme:
+`0xf3b58` ist der Offset *innerhalb von arm9.bin*, `0xF7B58` der Offset
+*in der ROM-Datei*. Der ARM9 liegt in der ROM bei `0x4000`:
+`0xf3b58 + 0x4000 = 0xF7B58`.
+**Merkregel:** `ROM-Offset = arm9.bin-Offset + 0x4000 = RAM − 0x02000000 + 0x4000`.
+Gegengeprüft gegen das GitHub-Repo (US-ROM) — identische Werte. Details in
+`KNOWLEDGE_MERGE.md`.
 
 **Stat-Record (70 B), relevante Felder:**
 
