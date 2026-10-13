@@ -1,0 +1,13 @@
+{
+  "name": "Beispiel: härterer Tower",
+  "characters": {
+    "213": {"hp": 5000, "def": 60}
+  },
+  "floors": {
+    "9": {
+      "enemies": {
+        "0": {"char_id": 213, "level": 90}
+      }
+    }
+  }
+}

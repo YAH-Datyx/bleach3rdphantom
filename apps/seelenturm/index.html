@@ -1,0 +1,634 @@
+<title>Seelenturm</title>
+<style>
+/* Layout: Bildschirm-Ablauf wie ein Tower-Modus (Titel → Turm → Team → Kampf); Kampf = Canvas-Feld + Seitenleiste */
+:root {
+  --bg: #10121a; --panel: #191c27; --panel2: #222636; --line: #31374a; --fg: #ebe9f2; --muted: #9a98ad;
+  --accent: #e8a33c; --accent-ink: #1c1306; --spirit: #7fd1ff;
+  --player: #4d8cf5; --enemy: #e2534a; --boss: #c27cff; --ok: #5fcf95;
+  --display: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: dark;
+}
+html, body { background: var(--bg); color: var(--fg); }
+body { font-family: var(--body); line-height: 1.45; padding-inline: 16px; padding-block: 14px 28px; }
+.wrap { max-width: 1080px; margin-inline: auto; display: grid; gap: 14px; }
+.top { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--display); font-size: 1.25rem; font-weight: 600; letter-spacing: .06em; }
+.brand small { color: var(--muted); font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; margin-left: 8px; }
+.crumbs { display: flex; gap: 6px; flex-wrap: wrap; font-family: var(--mono); font-size: .75rem; color: var(--muted); }
+.crumbs span.on { color: var(--accent); }
+.btn { font: 600 .92rem var(--body); border-radius: 8px; padding: 9px 14px; border: 1px solid var(--line); background: var(--panel2); color: var(--fg); cursor: pointer; }
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn:focus-visible, .floorbtn:focus-visible, canvas:focus-visible, label.btn:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.file input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.tag { font-family: var(--mono); font-size: .76rem; color: var(--muted); }
+.tag.ok { color: var(--ok); } .tag.warn { color: var(--accent); }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 1.15rem; margin: 0; letter-spacing: .03em; }
+[hidden] { display: none !important; }
+
+/* Titel */
+.title { display: grid; gap: 18px; justify-items: center; text-align: center; padding-block: 28px 20px; }
+.title h1 { font-family: var(--display); font-weight: 600; font-size: clamp(2.2rem, 8vw, 3.6rem); margin: 0; letter-spacing: .12em; text-wrap: balance; }
+.title p { color: var(--muted); max-width: 52ch; margin: 0; }
+.title canvas { width: min(260px, 70vw); height: auto; }
+.menu { display: grid; gap: 8px; width: min(320px, 100%); }
+.menu .btn { width: 100%; padding: 12px; }
+
+/* Turm */
+.tower { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.floorbtn { text-align: left; display: grid; gap: 2px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel2); color: var(--fg); cursor: pointer; font: inherit; }
+.floorbtn b { font-family: var(--display); font-size: 1.05rem; }
+.floorbtn span { font-family: var(--mono); font-size: .72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.floorbtn.cleared { border-color: var(--ok); }
+.floorbtn.cleared b::after { content: " ✓"; color: var(--ok); }
+.floorbtn:disabled { opacity: .35; cursor: not-allowed; }
+
+/* Team */
+.teamgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+.member { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px; align-items: center; background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 8px; }
+.member canvas { width: 44px; height: 44px; }
+.member b { display: block; font-size: .9rem; overflow-wrap: anywhere; }
+.member span { font-family: var(--mono); font-size: .72rem; color: var(--muted); }
+.form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.form label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); }
+.form input, .form select { font: .9rem var(--mono); background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 7px; padding: 8px; }
+
+/* Kampf */
+.battle { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 14px; align-items: start; }
+@media (max-width: 820px) { .battle { grid-template-columns: minmax(0, 1fr); } }
+.fieldwrap { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: grid; gap: 8px; min-width: 0; }
+.hud { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: space-between; align-items: center; font-size: .85rem; }
+.hud b { font-family: var(--display); font-size: 1rem; }
+.scroller { overflow: auto; max-height: 72vh; border-radius: 8px; }
+#field { display: block; cursor: pointer; }
+.side { display: grid; gap: 12px; min-width: 0; }
+.unitcard { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 10px; align-items: center; }
+.unitcard canvas { width: 52px; height: 52px; }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px 8px; font-family: var(--mono); font-size: .78rem; font-variant-numeric: tabular-nums; }
+.stats span { color: var(--muted); }
+.actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.log { font-family: var(--mono); font-size: .75rem; color: var(--muted); max-height: 200px; overflow: auto; display: grid; gap: 2px; }
+.log .hit { color: var(--fg); } .log .ko { color: var(--enemy); } .log .sys { color: var(--accent); }
+details { font-size: .84rem; color: var(--muted); }
+details summary { cursor: pointer; color: var(--fg); font-weight: 600; }
+details ul { padding-left: 18px; margin: 6px 0 0; display: grid; gap: 3px; }
+.overlay { position: fixed; inset: 0; background: #000a; display: grid; place-items: center; padding: 16px; z-index: 5; }
+.dialog { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; max-width: 420px; width: 100%; display: grid; gap: 12px; text-align: center; }
+.dialog h3 { font-family: var(--display); margin: 0; font-size: 1.5rem; letter-spacing: .06em; }
+.dialog .actions { justify-content: center; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap">
+
+<div class="wrap">
+  <div class="top">
+    <div class="brand">SEELENTURM<small id="romState">Beispieldaten</small></div>
+    <nav class="crumbs" aria-label="Ablauf"><span data-s="title">Titel</span>›<span data-s="tower">Turm</span>›<span data-s="team">Team</span>›<span data-s="battle">Kampf</span></nav>
+  </div>
+
+  <!-- Titel -->
+  <section class="screen panel title" id="s-title">
+    <canvas id="logo" width="520" height="300" aria-hidden="true"></canvas>
+    <h1>SEELENTURM</h1>
+    <p>30 Etagen, jede mit den echten Gegnern, Wellen und Werten aus deiner ROM. Die Datei wird nur lokal gelesen. Ohne ROM spielst du mit Beispieldaten.</p>
+    <div class="menu">
+      <label class="btn primary file" for="rom">ROM laden<input id="rom" type="file" accept=".nds"></label>
+      <button class="btn" id="goTower">Zum Turm</button>
+      <button class="btn" id="resetProg">Fortschritt zurücksetzen</button>
+    </div>
+  </section>
+
+  <!-- Turm -->
+  <section class="screen panel" id="s-tower" hidden>
+    <div class="top"><h2>Turm-Etagen</h2><span class="tag" id="towerInfo"></span></div>
+    <div class="tower" id="tower"></div>
+    <div class="actions"><button class="btn" data-go="title">Zurück</button></div>
+  </section>
+
+  <!-- Team -->
+  <section class="screen panel" id="s-team" hidden>
+    <div class="top"><h2 id="teamTitle">Aufstellung</h2><span class="tag" id="teamInfo"></span></div>
+    <div class="form">
+      <label for="teamMode">Team
+        <select id="teamMode">
+          <option value="partners">Etagen-Partner aus der ROM</option>
+          <option value="custom">Eigenes Team (Char-IDs)</option>
+        </select>
+      </label>
+      <label for="teamIds">Char-IDs (max. 8, durch Komma)
+        <input id="teamIds" placeholder="254, 200, 240, 181">
+      </label>
+      <label for="teamLvl">Level (leer = Etagen-Durchschnitt)
+        <input id="teamLvl" inputmode="numeric" placeholder="z. B. 60">
+      </label>
+    </div>
+    <div class="teamgrid" id="teamPreview"></div>
+    <div class="actions"><button class="btn" data-go="tower">Zurück</button><button class="btn primary" id="fight">Kampf beginnen</button></div>
+  </section>
+
+  <!-- Kampf -->
+  <section class="screen battle" id="s-battle" hidden>
+    <div class="fieldwrap">
+      <div class="hud"><b id="floorTitle"></b><span class="tag" id="turnInfo"></span></div>
+      <div class="scroller"><canvas id="field" tabindex="0" aria-label="Spielfeld"></canvas></div>
+      <div class="hud"><span class="tag" id="waveInfo"></span><span class="tag" id="hint">Tippe eine eigene Einheit an.</span></div>
+    </div>
+    <aside class="side">
+      <div class="panel">
+        <div class="unitcard"><canvas id="uIcon" width="104" height="104"></canvas><div><b id="uName">Keine Einheit gewählt</b><div class="tag" id="uSub"></div></div></div>
+        <div class="stats" id="uStats"></div>
+        <div class="actions">
+          <button class="btn" id="aAttack" disabled>Angriff</button>
+          <button class="btn" id="aSkill" disabled>Technik</button>
+          <button class="btn" id="aWait" disabled>Warten</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="actions">
+          <button class="btn primary" id="endTurn">Runde beenden</button>
+          <button class="btn" id="restart">Neu starten</button>
+          <button class="btn" id="leave">Aufgeben</button>
+        </div>
+      </div>
+      <div class="panel"><h2>Kampflog</h2><div class="log" id="log" aria-live="polite"></div></div>
+      <details class="panel">
+        <summary>Regeln (vereinfacht)</summary>
+        <ul>
+          <li>Aus der ROM: Gegner, Level, Positionen, Wellen, KI-Modus, Partner, Grundwerte, Kategorie.</li>
+          <li>Werte wachsen proportional zum Level (echte Formel noch unbekannt).</li>
+          <li>Bewegung 3–6 Felder nach SPD. Angriff auf Nachbarfeld mit Konter (halbe Kraft).</li>
+          <li>Technik: Reichweite 3, MAG gegen DEF, kostet MP, kein Konter.</li>
+          <li>Neue Welle, sobald das Feld leer ist. Höchstens 24 Gegner gleichzeitig.</li>
+          <li>Gelände und Startzone sind eigene Platzhalter.</li>
+        </ul>
+      </details>
+    </aside>
+  </section>
+</div>
+
+<div class="overlay" id="overlay" hidden><div class="dialog"><h3 id="dTitle"></h3><p id="dText" class="tag"></p><div class="actions" id="dActions"></div></div></div>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+
+// ---------------------------------------------------------------------------
+// ROM lesen (nur benötigte Bereiche)
+// ---------------------------------------------------------------------------
+const OFF = { stat: 0xfd882, statSize: 0x46, statCount: 255, tower: 0xf3b58 };   // EU-ROM (YBTP)
+const NAMES = { 125: "D-Roy", 144: "Kusaka", 154: "Hell Mantis", 155: "Hell Mantis", 156: "Sky Rift", 157: "Frog Head",
+  158: "Frog Head", 159: "Frog Head", 181: "Ukitake", 185: "Hell Mantis", 197: "Hanataro", 199: "Kaien", 200: "Fujimaru",
+  208: "Hisagi", 211: "Orihime", 213: "Evil Eater", 219: "Urahara (früher)", 226: "Urahara", 228: "Rukia", 240: "Shiyo",
+  245: "Kon", 247: "Shinji", 248: "Hiyori", 252: "Riesen-Wesen", 254: "Ichigo" };
+const u16 = (b, o) => b[o] | b[o + 1] << 8;
+const s16 = (b, o) => (u16(b, o) << 16) >> 16;
+const u32 = (b, o) => (b[o] | b[o + 1] << 8 | b[o + 2] << 16 | b[o + 3] << 24) >>> 0;
+async function readBytes(file, off, len) { return new Uint8Array(await file.slice(off, off + len).arrayBuffer()); }
+
+async function openRom(file) {
+  const h = await readBytes(file, 0, 0x200);
+  const code = String.fromCharCode(...h.slice(0x0C, 0x10));
+  const arm9 = await readBytes(file, u32(h, 0x20), u32(h, 0x2C));
+  const fnt = await readBytes(file, u32(h, 0x40), u32(h, 0x44));
+  const fat = await readBytes(file, u32(h, 0x48), u32(h, 0x4C));
+  const paths = new Map();
+  const walk = (dirId, prefix) => {
+    const e = (dirId & 0xFFF) * 8;
+    let p = u32(fnt, e), fid = u16(fnt, e + 4);
+    for (;;) {
+      const len = fnt[p++]; if (!len) break;
+      const nl = len & 0x7F, name = String.fromCharCode(...fnt.slice(p, p + nl)); p += nl;
+      if (len & 0x80) { const sub = u16(fnt, p); p += 2; walk(sub, prefix + name + "/"); } else paths.set(prefix + name, fid++);
+    }
+  };
+  walk(0xF000, "");
+  const getFile = async (path) => {
+    const id = paths.get(path); if (id === undefined) return null;
+    return readBytes(file, u32(fat, id * 8), u32(fat, id * 8 + 4) - u32(fat, id * 8));
+  };
+  return { code, arm9, getFile };
+}
+function narcFirst(b) {
+  if (String.fromCharCode(b[0], b[1], b[2], b[3]) !== "NARC") throw new Error("kein NARC");
+  const hs = u16(b, 0x0C), btnf = hs + u32(b, hs + 4), gmif = btnf + u32(b, btnf + 4);
+  return b.slice(gmif + 8 + u32(b, hs + 12), gmif + 8 + u32(b, hs + 16));
+}
+function parseStats(arm9) {
+  const out = {};
+  for (let i = 0; i < OFF.statCount; i++) {
+    const o = OFF.stat + i * OFF.statSize, id = u16(arm9, o + 2);
+    if (id !== i + 1) throw new Error("Stat-Tabelle passt nicht zu dieser ROM-Version");
+    out[id] = { id, cat: arm9[o + 4], level: arm9[o + 7], hp: u16(arm9, o + 8), mp: u16(arm9, o + 10),
+      atk: arm9[o + 12], def: arm9[o + 13], spd: arm9[o + 14], mag: arm9[o + 15] };
+  }
+  return out;
+}
+async function loadFloors(rom) {
+  const floors = [];
+  for (let f = 1; f <= 30; f++) {
+    const nn = String(f).padStart(2, "0");
+    const dposRaw = await rom.getFile(`yamada/DataBase/db_dpos_9${nn}.narc`);
+    const partyRaw = await rom.getFile(`yamada/DataBase/db_party_9${nn}.narc`);
+    const enemies = [], partners = [];
+    if (dposRaw) {
+      const d = narcFirst(dposRaw);
+      for (let i = 0; i < 64 && (i + 1) * 54 <= d.length; i++) {
+        const o = i * 54, cid = u16(d, o + 2); if (!cid) continue;
+        enemies.push({ cid, lvl: u16(d, o + 4), ai: d[o + 6], x: u16(d, o + 8), y: u16(d, o + 10), team: u16(d, o + 14), wave: s16(d, o + 16) });
+      }
+    }
+    if (partyRaw) {
+      const p = narcFirst(partyRaw);
+      for (let o = 4; o + 12 <= p.length; o += 14) if (u16(p, o) === 10) partners.push({ cid: u16(p, o + 4), lvl: u16(p, o + 2) });
+    }
+    floors.push({ n: f, map: u16(rom.arm9, OFF.tower + (f - 1) * 6 + 2), enemies, partners });
+  }
+  return floors;
+}
+
+// ---------------------------------------------------------------------------
+// Beispieldaten (frei erfunden, damit das Spiel ohne ROM läuft)
+// ---------------------------------------------------------------------------
+const DEMO_STATS = {
+  1: { id: 1, cat: 1, level: 10, hp: 620, mp: 60, atk: 30, def: 22, spd: 30, mag: 26 },
+  2: { id: 2, cat: 3, level: 10, hp: 540, mp: 90, atk: 22, def: 18, spd: 26, mag: 36 },
+  3: { id: 3, cat: 4, level: 10, hp: 700, mp: 40, atk: 34, def: 26, spd: 22, mag: 18 },
+  901: { id: 901, cat: 6, level: 10, hp: 420, mp: 20, atk: 26, def: 16, spd: 22, mag: 14 },
+  902: { id: 902, cat: 6, level: 10, hp: 900, mp: 30, atk: 32, def: 24, spd: 18, mag: 20 } };
+const DEMO_NAMES = { 1: "Übung A", 2: "Übung B", 3: "Übung C", 901: "Übungs-Hollow", 902: "Großer Übungs-Hollow" };
+const DEMO_FLOORS = [1, 2, 3].map(n => ({ n, map: 0, demo: true,
+  partners: [{ cid: 1, lvl: 10 + n * 2 }, { cid: 2, lvl: 10 + n * 2 }, { cid: 3, lvl: 10 + n * 2 }],
+  enemies: [
+    { cid: 901, lvl: 9 + n, ai: 10, x: 6, y: 3, team: 1, wave: 0 }, { cid: 901, lvl: 9 + n, ai: 10, x: 9, y: 4, team: 1, wave: 0 },
+    { cid: 901, lvl: 10 + n, ai: 15, x: 4, y: 5, team: 1, wave: 0 }, { cid: 901, lvl: 10 + n, ai: 10, x: 7, y: 6, team: 1, wave: 1 },
+    { cid: 902, lvl: 12 + n, ai: 10, x: 7, y: 2, team: 10, wave: 1 }].slice(0, 3 + n) }));
+
+let STATS = DEMO_STATS, NAMEMAP = DEMO_NAMES, FLOORS = DEMO_FLOORS, S = null, current = null;
+const progKey = () => FLOORS === DEMO_FLOORS ? "seelenturm-demo" : "seelenturm-progress";
+let progress = { cleared: [] };
+const loadProgress = () => { try { progress = JSON.parse(localStorage.getItem(progKey()) || "null") || { cleared: [] }; } catch (e) { progress = { cleared: [] }; } };
+const saveProgress = () => { try { localStorage.setItem(progKey(), JSON.stringify(progress)); } catch (e) {} };
+loadProgress();
+
+// ---------------------------------------------------------------------------
+// Eigene Figuren (Spielsteine mit Kategorie-Symbol) und eigenes Gelände
+// ---------------------------------------------------------------------------
+const CAT = { 1: "Klinge", 3: "Geist", 4: "Maske", 5: "Halbmaske", 6: "Hollow", 0: "Unbekannt" };
+const COLORS = { player: ["#4d8cf5", "#a9c8ff"], enemy: ["#e2534a", "#ffb0a8"] };
+function drawGlyph(ctx, cat, s, ink) {
+  ctx.save(); ctx.fillStyle = ink; ctx.strokeStyle = ink; ctx.lineWidth = s * 0.07; ctx.lineCap = "round"; ctx.lineJoin = "round";
+  ctx.beginPath();
+  if (cat === 1) {            // Klinge: schräge Schneide mit Parierstange
+    ctx.moveTo(-s * .22, s * .22); ctx.lineTo(s * .2, -s * .2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-s * .26, s * .06); ctx.lineTo(-s * .06, s * .26); ctx.stroke();
+  } else if (cat === 3) {     // Geist: Flamme
+    ctx.moveTo(0, -s * .26); ctx.quadraticCurveTo(s * .2, -s * .02, s * .1, s * .2); ctx.quadraticCurveTo(0, s * .28, -s * .1, s * .2);
+    ctx.quadraticCurveTo(-s * .2, -s * .02, 0, -s * .26); ctx.fill();
+  } else if (cat === 4) {     // Maske: halbe Maske mit Augenschlitz
+    ctx.arc(0, 0, s * .22, Math.PI * .5, Math.PI * 1.5); ctx.lineTo(s * .05, -s * .22); ctx.lineTo(s * .05, s * .22); ctx.closePath(); ctx.fill();
+    ctx.globalCompositeOperation = "destination-out"; ctx.beginPath(); ctx.ellipse(-s * .08, -s * .04, s * .06, s * .03, 0, 0, Math.PI * 2); ctx.fill();
+  } else if (cat === 5) {     // Halbmaske: Kreis mit Strich
+    ctx.arc(0, 0, s * .2, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.moveTo(-s * .2, 0); ctx.lineTo(s * .2, 0); ctx.stroke();
+  } else if (cat === 6) {     // Hollow: Schädelform mit Hörnern und Loch
+    ctx.moveTo(-s * .18, -s * .06); ctx.lineTo(-s * .28, -s * .28); ctx.lineTo(-s * .06, -s * .16); ctx.lineTo(s * .06, -s * .16);
+    ctx.lineTo(s * .28, -s * .28); ctx.lineTo(s * .18, -s * .06); ctx.quadraticCurveTo(s * .2, s * .2, 0, s * .24);
+    ctx.quadraticCurveTo(-s * .2, s * .2, -s * .18, -s * .06); ctx.fill();
+    ctx.globalCompositeOperation = "destination-out"; ctx.beginPath(); ctx.arc(0, s * .04, s * .07, 0, Math.PI * 2); ctx.fill();
+  } else { ctx.arc(0, 0, s * .1, 0, Math.PI * 2); ctx.fill(); }
+  ctx.restore();
+}
+function drawToken(ctx, cx, cy, s, u, opts = {}) {
+  const [main, light] = COLORS[u.side === "enemy" ? "enemy" : "player"];
+  ctx.save(); ctx.translate(cx, cy);
+  ctx.globalAlpha = opts.dim ? .55 : 1;
+  ctx.fillStyle = "rgba(0,0,0,.35)"; ctx.beginPath(); ctx.ellipse(0, s * .36, s * .34, s * .1, 0, 0, Math.PI * 2); ctx.fill();
+  // Schild-Form
+  ctx.beginPath();
+  ctx.moveTo(0, -s * .42); ctx.lineTo(s * .36, -s * .24); ctx.lineTo(s * .32, s * .16); ctx.lineTo(0, s * .38); ctx.lineTo(-s * .32, s * .16); ctx.lineTo(-s * .36, -s * .24); ctx.closePath();
+  const g = ctx.createLinearGradient(0, -s * .42, 0, s * .38); g.addColorStop(0, light); g.addColorStop(.35, main); g.addColorStop(1, "#1a1d29");
+  ctx.fillStyle = g; ctx.fill();
+  ctx.lineWidth = Math.max(1, s * .05); ctx.strokeStyle = u.boss ? "#c27cff" : opts.sel ? "#e8a33c" : "rgba(255,255,255,.55)"; ctx.stroke();
+  drawGlyph(ctx, u.cat, s, "rgba(255,255,255,.92)");
+  ctx.restore();
+}
+function rng(seed) { let s = seed >>> 0 || 1; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; }
+
+// ---------------------------------------------------------------------------
+// Spiel
+// ---------------------------------------------------------------------------
+const dist = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+const nameOf = (cid) => NAMEMAP[cid] || `Char #${cid}`;
+function scaled(cid, lvl) {
+  const b = STATS[cid] || { cat: 0, level: 1, hp: 300, mp: 30, atk: 20, def: 15, spd: 20, mag: 15 };
+  const f = (12 + lvl) / (12 + Math.max(1, b.level || 1)), r = (v) => Math.max(1, Math.round(v * f)), spd = r(b.spd || 10);
+  return { cat: b.cat, maxhp: r(b.hp || 100), maxmp: r(b.mp || 10), atk: r(b.atk || 5), def: r(b.def || 5), spd, mag: r(b.mag || 5),
+           move: Math.max(3, Math.min(6, 3 + Math.floor(spd / 45))) };
+}
+let uid = 0;
+function makeUnit(def, side) {
+  const st = scaled(def.cid, def.lvl);
+  return { uid: ++uid, side, cid: def.cid, lvl: def.lvl, ...st, hp: st.maxhp, mp: st.maxmp, x: def.x, y: def.y,
+           ai: def.ai ?? 10, boss: (def.team || 1) >= 10, moved: false, acted: false };
+}
+const avgLevel = (f) => Math.round(f.enemies.reduce((a, e) => a + e.lvl, 0) / Math.max(1, f.enemies.length));
+function teamFor(f) {
+  const lvlIn = parseInt($("teamLvl").value, 10), avg = avgLevel(f);
+  let team = [];
+  if ($("teamMode").value === "custom")
+    team = $("teamIds").value.split(/[,\s]+/).map(Number).filter(n => n > 0 && STATS[n]).slice(0, 8).map(cid => ({ cid, lvl: lvlIn > 0 ? lvlIn : avg }));
+  if (!team.length) team = f.partners.slice(0, 8).map(p => ({ cid: p.cid, lvl: lvlIn > 0 ? lvlIn : Math.max(p.lvl, avg) }));
+  if (!team.length) team = [{ cid: STATS[254] ? 254 : +Object.keys(STATS)[0], lvl: avg }];
+  return team;
+}
+
+function buildFloor(f) {
+  const R = rng(f.n * 7919 + (f.demo ? 3 : 17));
+  const pts = f.enemies.filter(e => !(e.x === 0 && e.y === 0));
+  const xs = pts.map(e => e.x), ys = pts.map(e => e.y);
+  const minX = Math.min(...xs) - 3, maxX = Math.max(...xs) + 3, minY = Math.min(...ys) - 3, maxY = Math.max(...ys) + 6;
+  const w = Math.max(10, maxX - minX + 1), h = Math.max(10, maxY - minY + 1), key = (x, y) => x + "," + y;
+  const units = [], cx = Math.floor(w / 2), zone = [];
+  for (let y = h - 1; y >= h - 3; y--) for (let d = 0; d < w; d++) { const x = cx + (d % 2 ? -(d + 1) / 2 : d / 2); if (x >= 0 && x < w) zone.push({ x, y }); }
+  teamFor(f).forEach((t, i) => units.push(makeUnit({ ...t, ...zone[i], ai: 0 }, "player")));
+  const byWave = {};
+  f.enemies.forEach(e => (byWave[e.wave] = byWave[e.wave] || []).push(e));
+  const pending = Object.keys(byWave).map(Number).sort((a, b) => (a < 0) - (b < 0) || a - b).map(k => ({ wave: k, list: byWave[k] }));
+  const rocks = new Set(), enemyTiles = new Set(pts.map(e => key(e.x - minX, e.y - minY)));
+  const ground = [];
+  for (let y = 0; y < h; y++) { ground.push([]); for (let x = 0; x < w; x++) { ground[y].push(R()); if (y < h - 3 && R() < .07 && !enemyTiles.has(key(x, y))) rocks.add(key(x, y)); } }
+  S = { f, w, h, units, pending, rocks, ground, turn: 1, phase: "player", sel: null, mode: "idle", reach: null, busy: false, over: false,
+        toLocal: (e) => ({ x: e.x - minX, y: e.y - minY }), log: [] };
+  spawnNextWave(true);
+  addLog(`Etage ${f.n}${f.demo ? " (Beispiel)" : ""} betreten. Gegner-Level Ø ${avgLevel(f)}.`, "sys");
+}
+function freeNear(x, y) {
+  const taken = new Set(S.units.filter(u => u.hp > 0).map(u => u.x + "," + u.y));
+  for (let r = 0; r < S.w + S.h; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+    if (Math.abs(dx) + Math.abs(dy) !== r) continue;
+    const nx = x + dx, ny = y + dy, k = nx + "," + ny;
+    if (nx >= 0 && ny >= 0 && nx < S.w && ny < S.h && !S.rocks.has(k) && !taken.has(k)) return { x: nx, y: ny };
+  }
+  return null;
+}
+function spawnNextWave(first) {
+  const next = S.pending.shift(); if (!next) return false;
+  let n = 0;
+  for (const e of next.list) {
+    if (S.units.filter(u => u.side === "enemy" && u.hp > 0).length >= 24) break;   // Aktor-Limit wie im Original
+    const p = (e.x === 0 && e.y === 0) ? { x: Math.floor(S.w / 2), y: 2 } : S.toLocal(e);
+    const spot = freeNear(Math.min(S.w - 1, p.x), Math.min(S.h - 1, p.y)); if (!spot) break;
+    S.units.push(makeUnit({ ...e, ...spot }, "enemy")); n++;
+  }
+  if (!first) addLog(`Welle ${next.wave < 0 ? "Sonder" : next.wave} erscheint: ${n} Gegner.`, "sys");
+  return true;
+}
+function reachable(u) {
+  const key = (x, y) => x + "," + y;
+  const block = new Set(S.units.filter(o => o.hp > 0 && (u.side === "enemy" ? o.side !== "enemy" : o.side === "enemy")).map(o => key(o.x, o.y)));
+  const occ = new Set(S.units.filter(o => o.hp > 0 && o !== u).map(o => key(o.x, o.y)));
+  const seen = new Map([[key(u.x, u.y), 0]]), q = [{ x: u.x, y: u.y, d: 0 }];
+  while (q.length) {
+    const c = q.shift(); if (c.d === u.move) continue;
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const nx = c.x + dx, ny = c.y + dy, k = key(nx, ny);
+      if (nx < 0 || ny < 0 || nx >= S.w || ny >= S.h || S.rocks.has(k) || block.has(k) || seen.has(k)) continue;
+      seen.set(k, c.d + 1); q.push({ x: nx, y: ny, d: c.d + 1 });
+    }
+  }
+  for (const k of occ) seen.delete(k);
+  return seen;
+}
+const skillCost = (u) => Math.max(5, Math.round(u.maxmp * .2));
+function damage(a, d, kind) {
+  const base = kind === "skill" ? a.mag * 2.2 - d.def * .8 : a.atk * 2 - d.def;
+  return Math.max(1, Math.round(Math.max(base, a.lvl * .5) * (.9 + Math.random() * .2)));
+}
+const hitChance = (a, d) => Math.max(.6, Math.min(.98, .9 + (a.spd - d.spd) / 200));
+function strike(a, t, kind) {
+  if (kind === "skill") a.mp -= skillCost(a);
+  if (Math.random() > hitChance(a, t)) { addLog(`${nameOf(a.cid)} verfehlt ${nameOf(t.cid)}.`); return; }
+  const d = damage(a, t, kind); t.hp = Math.max(0, t.hp - d);
+  addLog(`${nameOf(a.cid)} → ${nameOf(t.cid)}: ${d}${kind === "skill" ? " (Technik)" : ""}`, "hit");
+  if (!t.hp) { addLog(`${nameOf(t.cid)} besiegt.`, "ko"); return; }
+  if (kind === "melee" && Math.random() <= hitChance(t, a)) {
+    const c = Math.max(1, Math.round(damage(t, a, "melee") * .5)); a.hp = Math.max(0, a.hp - c);
+    addLog(`${nameOf(t.cid)} kontert: ${c}`, "hit"); if (!a.hp) addLog(`${nameOf(a.cid)} besiegt.`, "ko");
+  }
+}
+function checkEnd() {
+  const foes = S.units.filter(u => u.side === "enemy" && u.hp > 0), mine = S.units.filter(u => u.side !== "enemy" && u.hp > 0);
+  if (!mine.length) { S.over = true; dialog("Niederlage", `Dein Team fiel in Runde ${S.turn}.`, [["Nochmal", () => go("battle", S.f)], ["Zum Turm", () => go("tower")]]); return true; }
+  if (!foes.length) {
+    if (spawnNextWave(false)) return false;
+    S.over = true;
+    if (!progress.cleared.includes(S.f.n)) { progress.cleared.push(S.f.n); saveProgress(); }
+    const next = FLOORS.find(x => x.n === S.f.n + 1);
+    dialog(`Etage ${S.f.n} geschafft`, `Alle Gegner besiegt in ${S.turn} Runden.`,
+      next ? [["Nächste Etage", () => go("team", next)], ["Zum Turm", () => go("tower")]] : [["Turm bezwungen!", () => go("tower")]]);
+    return true;
+  }
+  return false;
+}
+
+// ---------------------------------------------------------------------------
+// Spielfeld (Canvas)
+// ---------------------------------------------------------------------------
+const field = $("field"), fctx = field.getContext("2d");
+let CS = 30;
+function drawField() {
+  const dpr = window.devicePixelRatio || 1;
+  CS = Math.max(22, Math.min(38, Math.floor((field.parentElement.clientWidth - 2) / S.w)));
+  field.width = S.w * CS * dpr; field.height = S.h * CS * dpr;
+  field.style.width = S.w * CS + "px"; field.style.height = S.h * CS + "px";
+  const c = fctx; c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  // Gelände: dunkler Stein mit leichter Körnung, Startzone heller
+  for (let y = 0; y < S.h; y++) for (let x = 0; x < S.w; x++) {
+    const n = S.ground[y][x], zone = y >= S.h - 3;
+    const l = 14 + n * 5 + ((x + y) % 2) * 1.5 + (zone ? 4 : 0);
+    c.fillStyle = `hsl(${zone ? 215 : 235}, 16%, ${l}%)`; c.fillRect(x * CS, y * CS, CS, CS);
+    c.fillStyle = "rgba(255,255,255,.035)"; c.fillRect(x * CS, y * CS, CS, 1);
+  }
+  // Hindernisse: Felsbrocken
+  for (const k of S.rocks) {
+    const [x, y] = k.split(",").map(Number), R = rng(x * 131 + y * 977);
+    c.fillStyle = "#3d4256"; c.beginPath();
+    for (let i = 0; i < 7; i++) { const a = i / 7 * Math.PI * 2, r = CS * (.3 + R() * .14); c.lineTo(x * CS + CS / 2 + Math.cos(a) * r, y * CS + CS / 2 + Math.sin(a) * r * .8); }
+    c.closePath(); c.fill(); c.fillStyle = "rgba(255,255,255,.08)"; c.fillRect(x * CS + CS * .3, y * CS + CS * .28, CS * .25, CS * .08);
+  }
+  // Markierungen
+  if (S.reach) for (const k of S.reach.keys()) { const [x, y] = k.split(",").map(Number); c.fillStyle = "rgba(77,140,245,.30)"; c.fillRect(x * CS + 1, y * CS + 1, CS - 2, CS - 2); }
+  const range = S.mode === "attack" ? 1 : S.mode === "skill" ? 3 : 0;
+  // Einheiten
+  for (const u of S.units.filter(u => u.hp > 0)) {
+    if (range && S.sel && u.side === "enemy" && dist(S.sel, u) <= range) { c.fillStyle = S.mode === "skill" ? "rgba(194,124,255,.35)" : "rgba(226,83,74,.38)"; c.fillRect(u.x * CS + 1, u.y * CS + 1, CS - 2, CS - 2); }
+    drawToken(c, u.x * CS + CS / 2, u.y * CS + CS / 2, CS * .92, u, { sel: S.sel === u, dim: u.side !== "enemy" && u.acted });
+    c.fillStyle = "rgba(0,0,0,.6)"; c.fillRect(u.x * CS + 3, u.y * CS + CS - 4, CS - 6, 3);
+    c.fillStyle = u.hp / u.maxhp > .35 ? "#6fe0a4" : "#f2c14e"; c.fillRect(u.x * CS + 3, u.y * CS + CS - 4, (CS - 6) * u.hp / u.maxhp, 3);
+  }
+}
+field.addEventListener("click", (ev) => {
+  const r = field.getBoundingClientRect();
+  clickCell(Math.floor((ev.clientX - r.left) / CS), Math.floor((ev.clientY - r.top) / CS));
+});
+
+function clickCell(x, y) {
+  if (!S || S.over || S.busy || S.phase !== "player") return;
+  const u = S.units.find(o => o.hp > 0 && o.x === x && o.y === y), sel = S.sel;
+  if ((S.mode === "attack" || S.mode === "skill") && sel) {
+    if (u && u.side === "enemy" && dist(sel, u) <= (S.mode === "attack" ? 1 : 3)) {
+      strike(sel, u, S.mode === "attack" ? "melee" : "skill");
+      sel.acted = sel.moved = true; S.mode = "idle"; S.sel = null;
+      if (!checkEnd()) autoEnd();
+    } else S.mode = "idle";
+    render(); return;
+  }
+  if (u && u.side !== "enemy" && !u.acted) { S.sel = u; S.mode = "idle"; S.reach = u.moved ? null : reachable(u); render(); return; }
+  if (sel && !sel.moved && S.reach && S.reach.has(x + "," + y)) { sel.x = x; sel.y = y; sel.moved = true; S.reach = null; render(); return; }
+  S.sel = null; S.reach = null; render(); if (u) showInfo(u);
+}
+const autoEnd = () => { if (S.units.filter(u => u.side !== "enemy" && u.hp > 0).every(u => u.acted)) setTimeout(enemyPhase, 350); };
+$("aAttack").onclick = () => { if (S.sel) { S.mode = "attack"; drawField(); $("hint").textContent = "Gegner auf einem Nachbarfeld wählen."; } };
+$("aSkill").onclick = () => { if (S.sel) { S.mode = "skill"; drawField(); $("hint").textContent = "Gegner bis 3 Felder entfernt wählen."; } };
+$("aWait").onclick = () => { if (S.sel) { S.sel.acted = S.sel.moved = true; S.sel = null; S.reach = null; render(); autoEnd(); } };
+$("endTurn").onclick = () => { if (!S.over && !S.busy && S.phase === "player") enemyPhase(); };
+$("restart").onclick = () => go("battle", S.f);
+$("leave").onclick = () => go("tower");
+
+async function enemyPhase() {
+  if (S.over || S.busy) return;
+  S.phase = "enemy"; S.busy = true; S.sel = null; S.reach = null; render();
+  const wait = (ms) => new Promise(r => setTimeout(r, ms));
+  for (const e of S.units.filter(u => u.side === "enemy" && u.hp > 0)) {
+    if (S.over || e.hp <= 0) continue;
+    const foes = S.units.filter(u => u.side !== "enemy" && u.hp > 0); if (!foes.length) break;
+    const near = foes.reduce((a, b) => dist(e, a) <= dist(e, b) ? a : b);
+    if (e.ai !== 10 && dist(e, near) > 6 && !e.alert) continue;   // Wachen bleiben stehen, bis jemand nahe kommt
+    e.alert = true;
+    let best = { x: e.x, y: e.y, s: dist(e, near) };
+    for (const k of reachable(e).keys()) { const [x, y] = k.split(",").map(Number), s = Math.abs(x - near.x) + Math.abs(y - near.y); if (s >= 1 && s < best.s) best = { x, y, s }; }
+    e.x = best.x; e.y = best.y; drawField(); await wait(140);
+    const adj = foes.filter(f => dist(e, f) === 1), inSkill = foes.filter(f => dist(e, f) <= 3);
+    const weakest = (l) => l.reduce((a, b) => a.hp <= b.hp ? a : b);
+    if (e.mag > e.atk && e.mp >= skillCost(e) && inSkill.length) strike(e, weakest(inSkill), "skill");
+    else if (adj.length) strike(e, weakest(adj), "melee");
+    drawField(); await wait(110);
+    if (checkEnd()) break;
+  }
+  if (!S.over) {
+    S.turn++; S.phase = "player";
+    S.units.forEach(u => { u.moved = u.acted = false; if (u.side !== "enemy") u.mp = Math.min(u.maxmp, u.mp + Math.round(u.maxmp * .08)); });
+    if (!checkEnd()) addLog(`Runde ${S.turn}.`, "sys");
+  }
+  S.busy = false; render();
+}
+
+// ---------------------------------------------------------------------------
+// Anzeige
+// ---------------------------------------------------------------------------
+function addLog(t, cls) { S.log.unshift({ t, cls }); S.log = S.log.slice(0, 80); }
+function iconCanvas(cv, u) { const c = cv.getContext("2d"); c.clearRect(0, 0, cv.width, cv.height); drawToken(c, cv.width / 2, cv.height / 2, cv.width * .92, u); }
+function showInfo(u) {
+  $("uName").textContent = u ? nameOf(u.cid) : "Keine Einheit gewählt";
+  $("uSub").textContent = u ? `Lv ${u.lvl} · ${CAT[u.cat] || "Kategorie " + u.cat}${u.boss ? " · Boss-Team" : ""} · ID ${u.cid}` : "";
+  $("uStats").innerHTML = u ? [["HP", `${u.hp}/${u.maxhp}`], ["MP", `${u.mp}/${u.maxmp}`], ["ATK", u.atk], ["DEF", u.def], ["SPD", u.spd], ["MAG", u.mag], ["Bew.", u.move], ["KI", u.side === "enemy" ? (u.ai === 10 ? "aktiv" : "Wache") : "–"]]
+    .map(([k, v]) => `<span>${k}</span><b>${v}</b>`).join("") : "";
+  const cv = $("uIcon"); cv.getContext("2d").clearRect(0, 0, cv.width, cv.height); if (u) iconCanvas(cv, u);
+}
+function render() {
+  drawField();
+  const sel = S.sel; showInfo(sel);
+  const can = sel && !sel.acted && S.phase === "player" && !S.busy, foes = S.units.filter(u => u.side === "enemy" && u.hp > 0);
+  $("aAttack").disabled = !(can && foes.some(f => dist(sel, f) === 1));
+  $("aSkill").disabled = !(can && sel.mp >= skillCost(sel) && foes.some(f => dist(sel, f) <= 3));
+  $("aWait").disabled = !can;
+  $("endTurn").disabled = S.phase !== "player" || S.busy || S.over;
+  $("hint").textContent = S.phase === "enemy" ? "Gegner ist am Zug …" : sel ? (sel.moved ? "Aktion wählen." : "Blaues Feld = Bewegung, oder direkt eine Aktion.") : "Tippe eine eigene Einheit an.";
+  $("floorTitle").textContent = `Etage ${S.f.n}${S.f.demo ? " · Beispiel" : " · Map " + S.f.map}`;
+  $("turnInfo").textContent = `Runde ${S.turn} · ${S.phase === "player" ? "Dein Zug" : "Gegnerzug"} · Gegner ${foes.length}`;
+  $("waveInfo").textContent = S.pending.length ? `Noch ${S.pending.length} Welle(n)` : "Letzte Welle";
+  $("log").innerHTML = S.log.map(l => `<div class="${l.cls || ""}">${l.t}</div>`).join("");
+}
+function renderTower() {
+  const t = $("tower"); t.replaceChildren();
+  FLOORS.forEach((f, i) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "floorbtn";
+    const cleared = progress.cleared.includes(f.n), open = i === 0 || cleared || progress.cleared.includes(FLOORS[i - 1].n);
+    if (cleared) b.className += " cleared";
+    b.disabled = !open || !f.enemies.length;
+    const waves = new Set(f.enemies.map(e => e.wave)).size;
+    b.innerHTML = `<b>Etage ${f.n}</b><span>${f.enemies.length} Gegner · Lv Ø ${avgLevel(f)}</span><span>${waves} Welle(n)${f.demo ? "" : " · Map " + f.map}</span>`;
+    b.onclick = () => go("team", f);
+    t.appendChild(b);
+  });
+  $("towerInfo").textContent = `${progress.cleared.length}/${FLOORS.length} geschafft`;
+}
+function renderTeam() {
+  const f = current, team = teamFor(f), p = $("teamPreview"); p.replaceChildren();
+  $("teamTitle").textContent = `Aufstellung · Etage ${f.n}`;
+  $("teamInfo").textContent = `Gegner Lv Ø ${avgLevel(f)} · ${f.enemies.length} Gegner`;
+  team.forEach(t => {
+    const st = scaled(t.cid, t.lvl), d = document.createElement("div"); d.className = "member";
+    const cv = document.createElement("canvas"); cv.width = 88; cv.height = 88;
+    drawToken(cv.getContext("2d"), 44, 44, 82, { side: "player", cat: st.cat, boss: false });
+    const info = document.createElement("div");
+    info.innerHTML = `<b>${nameOf(t.cid)}</b><span>Lv ${t.lvl} · HP ${st.maxhp} · ATK ${st.atk}</span>`;
+    d.append(cv, info); p.appendChild(d);
+  });
+}
+function dialog(title, text, buttons) {
+  $("dTitle").textContent = title; $("dText").textContent = text;
+  const a = $("dActions"); a.replaceChildren();
+  buttons.forEach(([l, fn], i) => { const b = document.createElement("button"); b.className = "btn" + (i ? "" : " primary"); b.textContent = l; b.onclick = () => { $("overlay").hidden = true; fn(); }; a.appendChild(b); });
+  $("overlay").hidden = false;
+}
+function go(screen, floor) {
+  ["title", "tower", "team", "battle"].forEach(s => $("s-" + s).hidden = s !== screen);
+  document.querySelectorAll(".crumbs span").forEach(sp => sp.classList.toggle("on", sp.dataset.s === screen));
+  if (floor) current = floor;
+  if (screen === "tower") renderTower();
+  if (screen === "team") renderTeam();
+  if (screen === "battle") { buildFloor(current); render(); }
+}
+document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(b.dataset.go));
+$("goTower").onclick = () => go("tower");
+$("fight").onclick = () => go("battle");
+$("resetProg").onclick = () => dialog("Fortschritt zurücksetzen?", "Alle geschafften Etagen werden wieder gesperrt.",
+  [["Zurücksetzen", () => { progress = { cleared: [] }; saveProgress(); }], ["Abbrechen", () => {}]]);
+["teamMode", "teamIds", "teamLvl"].forEach(id => $(id).addEventListener("input", () => {
+  if (current && !$("s-team").hidden) renderTeam();
+  try { localStorage.setItem("seelenturm-team", JSON.stringify({ m: $("teamMode").value, i: $("teamIds").value, l: $("teamLvl").value })); } catch (e) {}
+}));
+try { const t = JSON.parse(localStorage.getItem("seelenturm-team") || "null"); if (t) { $("teamMode").value = t.m; $("teamIds").value = t.i; $("teamLvl").value = t.l; } } catch (e) {}
+
+$("rom").addEventListener("change", async () => {
+  const file = $("rom").files[0]; if (!file) return;
+  $("romState").textContent = "lese ROM …";
+  try {
+    const rom = await openRom(file);
+    STATS = parseStats(rom.arm9); NAMEMAP = NAMES; FLOORS = await loadFloors(rom); loadProgress();
+    $("romState").textContent = `ROM ${rom.code} · 30 Etagen`; $("romState").className = "tag ok";
+    go("tower");
+    if (rom.code !== "YBTP") dialog("Andere ROM-Version", `Erkannt: ${rom.code}. Die Offsets stammen aus der EU-Version (YBTP), Werte können falsch sein.`, [["Verstanden", () => {}]]);
+  } catch (e) { $("romState").textContent = "ROM nicht lesbar: " + e.message; $("romState").className = "tag warn"; }
+});
+window.addEventListener("resize", () => { if (S && !$("s-battle").hidden) drawField(); });
+
+// Titelbild: Turm aus eigenen Formen
+(function logo() {
+  const cv = $("logo"), c = cv.getContext("2d"), R = rng(42);
+  for (let i = 0; i < 70; i++) { c.fillStyle = `rgba(127,209,255,${.15 + R() * .4})`; c.beginPath(); c.arc(R() * 520, R() * 300, R() * 1.8 + .4, 0, Math.PI * 2); c.fill(); }
+  const floors = 9;
+  for (let i = 0; i < floors; i++) {
+    const w = 170 - i * 14, h = 26, x = 260 - w / 2, y = 270 - (i + 1) * h;
+    c.fillStyle = i % 2 ? "#232838" : "#2b3145"; c.fillRect(x, y, w, h - 3);
+    c.fillStyle = "#e8a33c"; for (let k = 0; k < Math.max(1, Math.floor(w / 34)); k++) c.fillRect(x + 12 + k * 34, y + 9, 8, 8);
+  }
+  c.fillStyle = "#7fd1ff"; c.beginPath(); c.moveTo(260, 18); c.lineTo(276, 40); c.lineTo(244, 40); c.closePath(); c.fill();
+  [["player", 1, 120, 250], ["enemy", 6, 400, 236]].forEach(([side, cat, x, y]) => drawToken(c, x, y, 58, { side, cat, boss: side === "enemy" }));
+})();
+go("title");
+</script>

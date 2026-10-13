@@ -8,8 +8,13 @@ Zwei Stat-Tabellen liegen direkt in `arm9.bin` (kein Overlay):
 
 | Tabelle | Offset | Quelle (Source) | Einträge |
 |---|---|---|---|
-| Story-Mode | `0xfd882` | `data/yamada/DataBase/db_status.inc` | 255 |
-| VS-Mode    | `0xffc56` | `data/yamada/DataBase/db_VSstatus.inc` | ? |
+| Story-Mode | `0xfd882` – `0x101e3c` | `data/yamada/DataBase/db_status.inc` | 255, danach `FF FF FF FF` |
+| VS-Mode    | `0x11a938` | `data/yamada/DataBase/db_VSstatus.inc` | 37 (IDs nicht fortlaufend), Terminator `FF FF` |
+
+> **Korrektur (an der ROM verifiziert):** Das früher notierte VS-Offset `0xffc56`
+> liegt mitten in der Story-Tabelle (Eintrag 132 beginnt bei `0xffc54`). In
+> Die echte VS-Tabelle liegt bei `0x11a938`. Alle Tabellen stehen in
+> [`db-tables.md`](db-tables.md).
 
 Struct-Größe: **70 Bytes (0x46)** pro Charakter.
 
@@ -17,11 +22,11 @@ Struct-Größe: **70 Bytes (0x46)** pro Charakter.
 
 | Offset | Größe | Feld          | Hinweis |
 |--------|-------|---------------|---------|
-| 0x00   | u16   | character_id  | Identisch mit Index (1..255) |
-| 0x02   | u16   | sprite_id     | Meist gleich character_id |
-| 0x04   | u8    | flag1         | 1 = aktiv, 0 = Platzhalter |
-| 0x05   | u8    | flag2         | meist gleich flag1 |
-| 0x06   | u8    | type/class    | |
+| 0x00   | u16   | model         | Grafik-/Basis-ID, meist == ID, aber nicht immer (z. B. Eintrag 6 → 5, 254 → 94) |
+| 0x02   | u16   | **character_id** | == Index (1..255), das ist die echte ID |
+| 0x04   | u8    | flag1 / Kategorie | 0 = leer, sonst 1/3/4/5/6 (6 u. a. bei Hollows 154–156). **Kein** Aktiv-Flag |
+| 0x05   | u8    | flag2         | meist 1, teils 2/3 |
+| 0x06   | u8    | type          | meist low byte von model |
 | 0x07   | u8    | level         | |
 | 0x08   | u16   | **HP**        | Hitpoints |
 | 0x0A   | u16   | **MP** (Reiatsu) | |
@@ -67,7 +72,7 @@ Beispiel — Charakter #3, HP von 433 → 9999:
 | Offset | Inhalt | Doc |
 |---|---|---|
 | `0xfd882` | Story-Mode Stats (255 × 70 Bytes) | hier |
-| `0xffc56` | VS-Mode Stats | hier |
+| `0x11a938` | VS-Mode Stats (37 Einträge) | hier |
 | **`0xf3b58`** | **Tower-of-Souls Floor-Tabelle** (30 × 6 Bytes) | siehe `floor-roster.md` |
 
 ## Stat-Skalierung in-game

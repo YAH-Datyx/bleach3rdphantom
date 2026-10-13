@@ -1,0 +1,8 @@
+{
+  "name": "Fix: Partner/Gegner-Konflikte (Crash-Ursache)",
+  "floors": {
+    "6":  {"enemies": {"16": {"char_id": 213}}},
+    "16": {"enemies": {"16": {"char_id": 158}}},
+    "20": {"enemies": {"20": {"char_id": 157}}}
+  }
+}

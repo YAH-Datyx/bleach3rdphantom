@@ -135,3 +135,9 @@ Für mehr Enemies muss die Cap-Logik in arm9.bin gefunden und gepatcht werden (G
 - Map: 31
 - ~13 sichtbare Enemies aus großem Safe-Pool
 - Funktioniert stabil
+
+## Session 5 Update — Spawn-Logik per Ghidra (ersetzt die Cap-Hypothese aus Session 4)
+
+Die „hardcodierte Obergrenze pro Floor“ gibt es nicht. Die Grenzen sind: nur
+`wave == 0` spawnt beim Start (dpos +0x10), höchstens 32 Aktoren inklusive bis zu 8
+Party und nur die ersten 64 dpos-Slots. Details stehen in [`spawn-logic.md`](spawn-logic.md).
