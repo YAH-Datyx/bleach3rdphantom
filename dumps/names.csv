@@ -1,0 +1,372 @@
+﻿id,name
+0,12345678901234
+1,Yamamoto
+2,Sasakibe
+3,Soi Fon
+4,Omaeda
+5,Gin
+6,Gin
+7,Izuru
+8,Unohana
+9,Minazuki
+10,Isane
+11,Iemura
+12,Hanataro
+13,Suzunami
+14,Suzunami
+15,Suzunami
+16,Suzunami
+17,Aizen
+18,Aizen
+19,Aizen
+20,Kaien
+21,Fujimaru
+22,Fujimaru
+23,Fujimaru
+24,Ryujomaru
+25,Ryujomaru
+26,Matsuri
+27,Matsuri
+28,Matsuri
+29,Kotomaru
+30,Kotomaru
+31,Momo
+32,Byakuya
+33,Renji
+34,Shirogane
+35,Rikichi
+36,Komamura
+37,K. T. Myo-oh
+38,Iba
+39,Ikkanzaka
+40,Kyoraku
+41,Nanao
+42,Enjoji
+43,Tosen
+44,Tosen
+45,Hisagi
+46,Hitsugaya
+47,Rangiku
+48,Kenpachi
+49,Yachiru
+50,Ikkaku
+51,Yumichika
+52,Aramaki
+53,Urahara
+54,Urahara
+55,Mayuri
+56,K-Ashisogijizo
+57,Nemu
+58,Ukitake
+59,Sentaro
+60,Kiyone 
+61,Rukia
+62,Kurumadani
+63,M. Soul Reaper
+64,M. Soul Reaper
+65,M. Soul Reaper
+66,F. Soul Reaper
+67,F. Soul Reaper
+68,F. Soul Reaper
+69,Yoruichi
+70,Yoruichi
+71,Stealth Force
+72,Jidanbo
+73,Hiyosu
+74,Akon
+75,Rin
+76,Konoka
+77,Kukaku 
+78,Ganju 
+79,Koganehiko
+80,Shiroganehiko
+81,Bonnie
+82,Shiyo
+83,Top
+84,Fever
+85,Hawk
+86,Dumbbell
+87,Yuichi Shibata
+88,Elder
+89,Rukon Boy
+90,Rukon Girl
+91,Rukon Youth
+92,Rukon Woman
+93,Rukon Man
+94,Ichigo 
+95,Chad
+96,Uryu 
+97,Orihime 
+98,Tessai
+99,Ururu
+100,Jinta 
+101,Kon
+102,Isshin
+103,Yuzu
+104,Karin
+105,Tatsuki
+106,Keigo
+107,Mizuiro
+108,Chizuru
+109,Michiru
+110,Ryo 
+111,Mahana
+112,Don Kan'onji
+113,Ulquiorra
+114,Ulquiorra
+115,Grimmjow
+116,Grimmjow
+117,Yammy
+118,Yammy
+119,Shawlong
+120,Shawlong
+121,Edrad
+122,Edrad
+123,Ilfort
+124,Ilfort
+125,D-Roy
+126,D-Roy
+127,Nakeem
+128,Nakeem
+129,Arturo
+130,Arturo
+131,Mad Eater
+132,Yamamoto
+133,Soi Fon
+134,Unohana
+135,Minazuki
+136,Byakuya
+137,Komamura
+138,K. T. Myo-oh
+139,Kyoraku
+140,Hitsugaya
+141,Kenpachi
+142,Mayuri
+143,K-Ashisogijizo
+144,Ukitake
+145,Screamer
+146,Screamer
+147,Screamer
+148,Grand Savage
+149,Grand Savage
+150,Grand Savage
+151,Familiar
+152,Familiar
+153,Familiar
+154,Hell Mantis
+155,Hell Mantis
+156,Hell Mantis
+157,Frog Head
+158,Frog Head
+159,Frog Head
+160,Wide Bone
+161,Wide Bone
+162,Wide Bone
+163,Menos Grande
+164,Menos Grande
+165,Menos Grande
+166,Huge Hollow
+167,Huge Hollow
+168,Huge Hollow
+169,Karakura Boy
+170,Karakura Girl
+171,Karakura Youth
+172,Karakura Woman
+173,Karakura Man
+174,Whole
+175,Whole
+176,Whole
+177,Whole
+178,Whole
+179,Shinji
+180,Hiyori
+181,Kusaka
+182,Numb Jelly
+183,Numb Jelly
+184,Numb Jelly
+185,Sky Rift
+186,Evil Eater
+187,Evil Eater
+188,Evil Eater
+189,Tentacle
+190,Tentacle
+191,Tentacle
+192,Zanpakuto
+193,Sqd 11 Member
+194,Sqd 11 Member
+195,Sqd 11 Member
+196,Izuru
+197,Hanataro
+198,Aizen
+199,Kaien
+200, 
+201, 
+202, 
+203, 
+204, 
+205, 
+206,Momo
+207,Renji
+208,Hisagi
+209,Rangiku
+210, 
+211, 
+212, 
+213, 
+214, 
+215, 
+216,Yachiru
+217,Ikkaku
+218,Yumichika
+219,Urahara
+220, 
+221, 
+222, 
+223, 
+224, 
+225, 
+226,Urahara
+227,Nemu
+228,Rukia 
+229,Yoruichi
+230, 
+231, 
+232, 
+233, 
+234, 
+235, 
+236,Yoruichi
+237,Jidanbo
+238,Konoka
+239,Kukaku 
+240,Shiyo
+241,Ichigo 
+242,Chad
+243,Uryu 
+244,Orihime 
+245,Kon
+246,Don Kan'onji
+247,Shinji 
+248,Hiyori
+249,Kusaka
+250,Drunk Reaper
+251,Female Spirit
+252,Giant Entity
+253,Yoruichi
+254,Ichigo
+255, 
+256, 
+257, 
+258, 
+259, 
+260, 
+261, 
+262, 
+263, 
+264, 
+265, 
+266, 
+267, 
+268, 
+269, 
+270, 
+271, 
+272, 
+273, 
+274, 
+275, 
+276, 
+277, 
+278, 
+279, 
+280, 
+281, 
+282, 
+283, 
+284, 
+285, 
+286, 
+287, 
+288, 
+289, 
+290, 
+291, 
+292, 
+293, 
+294, 
+295, 
+296, 
+297, 
+298, 
+299, 
+300, 
+301,Strange Hollow
+302,Graceful Woman
+303,Gentleman
+304,Girl Hostage
+305,Rukon Boy
+306,Rukon Girl
+307,Pigtailed Girl
+308,Small Boy
+309,Big-Eyed Girl
+310,Redheaded Boy
+311,Water Vendor
+312,Eerie Man
+313,Mystery Girl
+314,Drunk Reaper
+315,Mystery Woman
+316,Mystery Man
+317,Strange Glow
+318,Strange Voice
+319,Young Man
+320,Shady Youth
+321,Shady Man
+322,Female Spirit
+323,Sporty Girl
+324,Small Arrancar
+325,Huge Arrancar
+326,Rugged Man
+327,Wild Arrancar
+328,Thin Arrancar
+329,Dangerous Man
+330,Aggressive Man
+331,Charming Woman
+332,Cold Man
+333,Shady Man
+334,Agile Woman
+335,Anxious Girl
+336,Rukia
+337,Renji
+338,Phantom
+339,Phantom
+340,Sentry
+341,PF Girl
+342,Plotter
+343,Proud Voice
+344,Honest Voice
+345,Gentle Woman
+346,Messenger
+347,Something Odd
+348,Squad 8 Rookie
+349,Squad 8 Man
+350,Squad 8 Woman
+351,Squad 4 Man
+352,Familiar Voice
+353,Timid Reaper
+354,Fat Reaper
+355,Shiny Head Man
+356,Dandy
+357,Gentle Voice
+358,Violent Voice
+359,Triumphal Lion
+360,Mirror Maiden
+361,Squad 6 Man
+362,Karakura Youth
+363,Karakura Man
+364,Young Reaper
+365,Soul Reaper
+366,Woman's Scream
+367,Ominous Man
+368,Quiet Voice
+369,Mystery Mask
+370,Giant Entity

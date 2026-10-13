@@ -1,0 +1,18 @@
+# --- ROM-Dateien: je 128 MB, GitHub-Limit ist 100 MB pro Datei ---
+*.nds
+
+# --- Emulator (39 MB Binaries, gehoert nicht ins Wissens-Repo) ---
+desmume-0.9.13-win64/
+
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+
+# --- OS / OneDrive ---
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# --- Lokale Claude-Code-Konfiguration (nicht teilen) ---
+.claude/

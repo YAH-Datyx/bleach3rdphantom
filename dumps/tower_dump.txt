@@ -1,0 +1,558 @@
+=== Etage 1  (Map 34, Party 901) ===
+  slot  16: Familiar         LV3   pos=(18,29) dir=0
+  slot  17: Familiar         LV3   pos=(18,26) dir=0
+  slot  18: Familiar         LV3   pos=(18,23) dir=0
+  slot  19: Familiar         LV3   pos=(16,27) dir=0
+  slot  20: Familiar         LV3   pos=(16,25) dir=0
+  slot  21: Hell Mantis      LV5   pos=(13,26) dir=0
+  slot  22: Hell Mantis      LV5   pos=(13,23) dir=0
+  slot  23: Screamer         LV3   pos=(22,17) dir=3
+  slot  24: Screamer         LV3   pos=(25,17) dir=3
+  slot  25: Frog Head        LV5   pos=(20,13) dir=3
+  slot  26: Frog Head        LV5   pos=(23,13) dir=3
+  slot  27: Frog Head        LV5   pos=(26,13) dir=3
+  slot  28: Hell Mantis      LV5   pos=(31,20) dir=2
+  slot  29: Hell Mantis      LV5   pos=(31,18) dir=2
+
+=== Etage 2  (Map 21, Party 902) ===
+  slot  16: Screamer         LV10  pos=(22,28) dir=0
+  slot  17: Screamer         LV10  pos=(22,25) dir=0
+  slot  18: Screamer         LV10  pos=(22,22) dir=0
+  slot  19: Familiar         LV7   pos=(20,30) dir=0
+  slot  20: Familiar         LV7   pos=(20,26) dir=0
+  slot  21: Familiar         LV7   pos=(20,23) dir=0
+  slot  22: Familiar         LV7   pos=(20,19) dir=0
+  slot  23: Evil Eater       LV15  pos=(18,27) dir=0
+  slot  24: Evil Eater       LV15  pos=(18,22) dir=0
+  slot  25: Numb Jelly       LV13  pos=(15,28) dir=0
+  slot  26: Numb Jelly       LV13  pos=(15,24) dir=0
+  slot  27: Numb Jelly       LV13  pos=(15,20) dir=0
+  slot  28: Grand Savage     LV13  pos=(11,24) dir=0
+  slot  29: Grand Savage     LV13  pos=(11,21) dir=0
+
+=== Etage 3  (Map 6, Party 903) ===
+  slot  16: Frog Head        LV9   pos=(15,24) dir=1
+  slot  17: Frog Head        LV9   pos=(17,24) dir=1
+  slot  18: Frog Head        LV9   pos=(19,24) dir=1
+  slot  19: Huge Hollow      LV23  pos=(18,28) dir=1
+  slot  20: Wide Bone        LV15  pos=(13,16) dir=3
+  slot  21: Wide Bone        LV15  pos=(16,16) dir=3
+  slot  22: Wide Bone        LV15  pos=(19,16) dir=3
+  slot  23: Menos Grande     LV20  pos=(14,13) dir=3
+  slot  24: Menos Grande     LV20  pos=(18,13) dir=3
+
+=== Etage 4  (Map 37, Party 904) ===
+  slot  16: Hell Mantis      LV15  pos=(13,18) dir=3
+  slot  17: Hell Mantis      LV15  pos=(17,18) dir=3
+  slot  18: Frog Head        LV18  pos=(9,20) dir=3
+  slot  19: Frog Head        LV18  pos=(10,18) dir=3
+  slot  20: Screamer         LV18  pos=(23,20) dir=3
+  slot  21: Screamer         LV18  pos=(22,18) dir=3
+  slot  22: Familiar         LV11  pos=(12,16) dir=3
+  slot  23: Familiar         LV11  pos=(14,16) dir=3
+  slot  24: Familiar         LV11  pos=(16,16) dir=3
+  slot  25: Familiar         LV11  pos=(18,16) dir=3
+  slot  26: Evil Eater       LV23  pos=(13,14) dir=3
+  slot  27: Evil Eater       LV23  pos=(18,14) dir=3
+  slot  28: Yamamoto         LV28  pos=(15,13) dir=3
+
+=== Etage 5  (Map 4, Party 905) ===
+  slot  16: Familiar         LV13  pos=(21,16) dir=1
+  slot  17: Familiar         LV13  pos=(20,18) dir=1
+  slot  18: Familiar         LV13  pos=(22,18) dir=1
+  slot  19: Soi Fon          LV28  pos=(23,24) dir=1
+  slot  20: Hell Mantis      LV23  pos=(21,25) dir=1
+  slot  21: Hell Mantis      LV23  pos=(20,26) dir=1
+  slot  22: Frog Head        LV23  pos=(25,25) dir=1
+  slot  23: Frog Head        LV23  pos=(27,26) dir=1
+  slot  24: Familiar         LV15  pos=(10,13) dir=1
+  slot  25: Familiar         LV15  pos=(8,13) dir=1
+  slot  26: Screamer         LV20  pos=(8,15) dir=1
+  slot  27: Screamer         LV20  pos=(10,17) dir=1
+  slot  29: Familiar         LV18  pos=(9,18) dir=1
+  slot  30: Familiar         LV18  pos=(10,19) dir=1
+  slot  31: Familiar         LV18  pos=(9,20) dir=1
+  slot  32: Familiar         LV18  pos=(28,21) dir=2
+  slot  33: Familiar         LV18  pos=(28,23) dir=2
+  slot  34: Familiar         LV18  pos=(30,22) dir=2
+
+=== Etage 6  (Map 20, Party 906) ===
+  slot  16: Menos Grande     LV23  pos=(23,27) dir=0
+  slot  17: Gin              LV32  pos=(19,21) dir=0
+  slot  18: Izuru            LV30  pos=(19,23) dir=0
+  slot  19: Huge Hollow      LV25  pos=(15,21) dir=0
+  slot  20: Frog Head        LV20  pos=(23,16) dir=0
+  slot  21: Frog Head        LV20  pos=(23,14) dir=0
+  slot  22: Hell Mantis      LV20  pos=(12,15) dir=0
+  slot  23: Hell Mantis      LV20  pos=(12,13) dir=0
+  slot  24: Screamer         LV20  pos=(17,9) dir=0
+  slot  25: Screamer         LV20  pos=(19,9) dir=0
+  slot  26: Familiar         LV15  pos=(29,20) dir=3
+  slot  27: Familiar         LV15  pos=(31,20) dir=3
+  slot  28: Familiar         LV15  pos=(29,31) dir=1
+  slot  29: Familiar         LV15  pos=(31,31) dir=1
+
+=== Etage 7  (Map 30, Party 907) ===
+  slot  16: M. Soul Reaper   LV20  pos=(18,21) dir=2
+  slot  17: M. Soul Reaper   LV20  pos=(18,18) dir=2
+  slot  18: M. Soul Reaper   LV20  pos=(19,24) dir=2
+  slot  19: M. Soul Reaper   LV20  pos=(19,16) dir=2
+  slot  20: F. Soul Reaper   LV23  pos=(22,27) dir=2
+  slot  21: F. Soul Reaper   LV23  pos=(21,22) dir=2
+  slot  22: F. Soul Reaper   LV23  pos=(21,18) dir=2
+  slot  23: F. Soul Reaper   LV23  pos=(21,14) dir=2
+  slot  24: F. Soul Reaper   LV25  pos=(23,23) dir=2
+  slot  25: F. Soul Reaper   LV25  pos=(23,20) dir=2
+  slot  26: F. Soul Reaper   LV25  pos=(23,16) dir=2
+  slot  27: Hanataro         LV30  pos=(26,22) dir=2
+  slot  28: Unohana          LV34  pos=(26,19) dir=2
+
+=== Etage 8  (Map 29, Party 908) ===
+  slot  16: M. Soul Reaper   LV24  pos=(19,14) dir=3
+  slot  17: M. Soul Reaper   LV25  pos=(17,14) dir=3
+  slot  18: M. Soul Reaper   LV25  pos=(15,14) dir=3
+  slot  19: M. Soul Reaper   LV24  pos=(13,14) dir=3
+  slot  20: F. Soul Reaper   LV26  pos=(19,11) dir=3
+  slot  21: F. Soul Reaper   LV28  pos=(17,11) dir=3
+  slot  22: F. Soul Reaper   LV28  pos=(15,11) dir=3
+  slot  23: F. Soul Reaper   LV26  pos=(13,11) dir=3
+  slot  24: Momo             LV33  pos=(15,8) dir=3
+
+=== Etage 9  (Map 14, Party 909) ===
+  slot  16: Familiar         LV22  pos=(16,23) dir=3
+  slot  17: Familiar         LV22  pos=(18,23) dir=3
+  slot  18: Familiar         LV22  pos=(20,23) dir=3
+  slot  19: Renji            LV38  pos=(18,21) dir=3
+  slot  20: Screamer         LV22  pos=(14,15) dir=1
+  slot  21: Screamer         LV22  pos=(16,15) dir=1
+  slot  22: Screamer         LV22  pos=(18,15) dir=1
+  slot  23: Byakuya          LV38  pos=(16,18) dir=1
+  slot  25: Screamer         LV30  pos=(15,29) dir=1
+  slot  26: Screamer         LV30  pos=(17,29) dir=1
+  slot  27: Screamer         LV30  pos=(19,29) dir=1
+  slot  28: Familiar         LV25  pos=(14,21) dir=3
+  slot  29: Familiar         LV25  pos=(22,25) dir=3
+  slot  30: Familiar         LV25  pos=(13,9) dir=3
+  slot  31: Familiar         LV25  pos=(15,9) dir=3
+  slot  32: Familiar         LV25  pos=(17,9) dir=3
+  slot  33: Screamer         LV30  pos=(13,18) dir=1
+  slot  34: Screamer         LV30  pos=(19,18) dir=1
+
+=== Etage 10  (Map 2, Party 910) ===
+  slot  16: Familiar         LV24  pos=(14,20) dir=2
+  slot  17: Familiar         LV24  pos=(14,22) dir=2
+  slot  18: Familiar         LV24  pos=(14,24) dir=2
+  slot  19: Hell Mantis      LV28  pos=(17,21) dir=2
+  slot  20: Hell Mantis      LV28  pos=(17,25) dir=2
+  slot  21: Hell Mantis      LV28  pos=(19,23) dir=2
+  slot  22: Huge Hollow      LV35  pos=(17,16) dir=2
+  slot  23: Numb Jelly       LV32  pos=(20,21) dir=2
+  slot  24: Frog Head        LV30  pos=(22,21) dir=2
+  slot  25: Frog Head        LV30  pos=(22,23) dir=2
+  slot  26: Komamura         LV40  pos=(21,18) dir=2
+
+=== Etage 11  (Map 33, Party 911) ===
+  slot  16: M. Soul Reaper   LV28  pos=(15,18) dir=3
+  slot  17: M. Soul Reaper   LV28  pos=(17,18) dir=3
+  slot  18: M. Soul Reaper   LV28  pos=(20,18) dir=3
+  slot  19: M. Soul Reaper   LV28  pos=(23,18) dir=3
+  slot  20: M. Soul Reaper   LV28  pos=(25,18) dir=3
+  slot  21: F. Soul Reaper   LV32  pos=(15,15) dir=3
+  slot  22: F. Soul Reaper   LV32  pos=(17,15) dir=3
+  slot  23: F. Soul Reaper   LV32  pos=(23,15) dir=3
+  slot  24: F. Soul Reaper   LV32  pos=(25,15) dir=3
+  slot  25: Kyoraku          LV42  pos=(20,15) dir=3
+
+=== Etage 12  (Map 31, Party 912) ===
+  slot  16: Evil Eater       LV28  pos=(20,19) dir=0
+  slot  17: Evil Eater       LV28  pos=(20,22) dir=0
+  slot  18: Frog Head        LV32  pos=(20,16) dir=0
+  slot  19: Frog Head        LV32  pos=(20,24) dir=0
+  slot  20: Frog Head        LV30  pos=(17,16) dir=0
+  slot  21: Frog Head        LV30  pos=(17,22) dir=0
+  slot  22: Frog Head        LV38  pos=(15,15) dir=0
+  slot  23: Frog Head        LV38  pos=(15,23) dir=0
+  slot  24: Hisagi           LV38  pos=(16,18) dir=0
+  slot  25: Tosen            LV40  pos=(16,20) dir=0
+
+=== Etage 13  (Map 25, Party 913) ===
+  slot  16: Menos Grande     LV35  pos=(20,25) dir=3
+  slot  17: Huge Hollow      LV35  pos=(25,24) dir=3
+  slot  18: Menos Grande     LV35  pos=(30,23) dir=3
+  slot  19: Numb Jelly       LV30  pos=(15,25) dir=3
+  slot  20: Numb Jelly       LV32  pos=(22,20) dir=3
+  slot  21: Numb Jelly       LV32  pos=(26,20) dir=3
+  slot  22: Numb Jelly       LV30  pos=(34,23) dir=3
+  slot  23: Hell Mantis      LV38  pos=(19,14) dir=3
+  slot  24: Hell Mantis      LV38  pos=(24,14) dir=3
+  slot  25: Evil Eater       LV40  pos=(17,12) dir=3
+  slot  26: Evil Eater       LV40  pos=(25,12) dir=3
+  slot  27: Hitsugaya        LV46  pos=(21,11) dir=3
+  slot  28: Rangiku          LV44  pos=(19,10) dir=3
+
+=== Etage 14  (Map 15, Party 914) ===
+  slot  16: Ikkaku           LV45  pos=(22,24) dir=0
+  slot  17: Kenpachi         LV48  pos=(22,21) dir=0
+  slot  18: Yumichika        LV45  pos=(22,18) dir=0
+  slot  19: Yachiru          LV48  pos=(21,22) dir=0
+  slot  20: M. Soul Reaper   LV32  pos=(18,24) dir=0
+  slot  21: M. Soul Reaper   LV32  pos=(18,22) dir=0
+  slot  22: M. Soul Reaper   LV32  pos=(18,19) dir=0
+  slot  23: M. Soul Reaper   LV32  pos=(18,17) dir=0
+
+=== Etage 15  (Map 39, Party 915) ===
+  slot  16: Screamer         LV34  pos=(20,20) dir=3
+  slot  17: Screamer         LV34  pos=(23,20) dir=3
+  slot  18: Wide Bone        LV38  pos=(15,21) dir=3
+  slot  19: Screamer         LV34  pos=(13,20) dir=3
+  slot  20: Screamer         LV34  pos=(16,20) dir=3
+  slot  21: Urahara          LV50  pos=(21,18) dir=3
+  slot  22: Familiar         LV45  pos=(18,16) dir=3
+  slot  23: Familiar         LV45  pos=(21,16) dir=3
+  slot  24: Frog Head        LV38  pos=(9,22) dir=0
+  slot  25: Frog Head        LV38  pos=(9,20) dir=0
+  slot  28: Mayuri           LV50  pos=(19,12) dir=3
+  slot  29: Nemu             LV48  pos=(20,11) dir=3
+
+=== Etage 16  (Map 30, Party 916) ===
+  slot  16: Numb Jelly       LV36  pos=(18,21) dir=0
+  slot  17: Numb Jelly       LV36  pos=(18,18) dir=0
+  slot  18: Wide Bone        LV40  pos=(17,23) dir=0
+  slot  19: Wide Bone        LV40  pos=(17,15) dir=0
+  slot  20: Grand Savage     LV42  pos=(15,25) dir=0
+  slot  21: Grand Savage     LV42  pos=(15,11) dir=0
+  slot  22: Evil Eater       LV45  pos=(14,16) dir=0
+  slot  23: Kaien            LV52  pos=(14,20) dir=0
+  slot  24: Rukia            LV52  pos=(13,18) dir=0
+  slot  25: Ukitake          LV52  pos=(12,21) dir=0
+
+=== Etage 17  (Map 24, Party 917) ===
+  slot  16: Screamer         LV38  pos=(14,19) dir=1
+  slot  17: Screamer         LV38  pos=(17,19) dir=1
+  slot  18: Jidanbo          LV50  pos=(16,21) dir=1
+  slot  19: Screamer         LV40  pos=(13,22) dir=1
+  slot  20: Screamer         LV40  pos=(18,22) dir=1
+  slot  21: Yoruichi         LV54  pos=(23,18) dir=2
+  slot  22: Familiar         LV40  pos=(21,24) dir=1
+  slot  23: Familiar         LV40  pos=(24,24) dir=1
+  slot  24: Numb Jelly       LV45  pos=(17,28) dir=1
+  slot  25: Numb Jelly       LV45  pos=(22,28) dir=1
+  slot  26: Screamer         LV43  pos=(30,20) dir=2
+  slot  27: Screamer         LV43  pos=(30,25) dir=2
+  slot  28: Kukaku           LV54  pos=(33,23) dir=2
+
+=== Etage 18  (Map 10, Party 918) ===
+  slot  16: Huge Hollow      LV45  pos=(19,20) dir=1
+  slot  17: Screamer         LV40  pos=(15,18) dir=1
+  slot  18: Screamer         LV40  pos=(12,18) dir=1
+  slot  19: Frog Head        LV42  pos=(14,20) dir=1
+  slot  20: Frog Head        LV42  pos=(11,20) dir=1
+  slot  21: Ichigo           LV56  pos=(16,23) dir=1
+  slot  22: Uryu             LV54  pos=(18,25) dir=1
+  slot  23: Chad             LV54  pos=(16,25) dir=1
+  slot  24: Orihime          LV50  pos=(14,25) dir=1
+  slot  25: Don Kan'onji     LV50  pos=(24,14) dir=1
+  slot  26: Kon              LV50  pos=(23,16) dir=1
+
+=== Etage 19  (Map 35, Party 919) ===
+  slot  16: Familiar         LV42  pos=(18,18) dir=2
+  slot  17: Familiar         LV42  pos=(18,20) dir=2
+  slot  18: Frog Head        LV45  pos=(21,19) dir=2
+  slot  19: Screamer         LV48  pos=(18,12) dir=2
+  slot  20: Screamer         LV48  pos=(18,10) dir=2
+  slot  21: Yoruichi         LV58  pos=(20,11) dir=2
+  slot  22: Huge Hollow      LV50  pos=(19,24) dir=1
+  slot  23: Aizen            LV55  pos=(16,25) dir=1
+  slot  24: Screamer         LV48  pos=(15,27) dir=1
+  slot  25: Screamer         LV48  pos=(17,27) dir=1
+  slot  26: Hell Mantis      LV48  pos=(27,20) dir=2
+  slot  27: Hell Mantis      LV48  pos=(27,18) dir=2
+  slot  28: Mad Eater        LV50  pos=(27,15) dir=2
+  slot  29: Urahara          LV58  pos=(30,19) dir=2
+
+=== Etage 20  (Map 27, Party 920) ===
+  slot  16: Familiar         LV46  pos=(16,21) dir=2
+  slot  17: Familiar         LV46  pos=(16,23) dir=2
+  slot  18: Screamer         LV48  pos=(18,19) dir=2
+  slot  19: Screamer         LV48  pos=(18,25) dir=2
+  slot  20: Suzunami         LV60  pos=(20,22) dir=2
+  slot  21: Fujimaru         LV58  pos=(22,20) dir=2
+  slot  22: Matsuri          LV58  pos=(22,25) dir=2
+  slot  23: Konoka           LV55  pos=(22,22) dir=2
+  slot  24: Hell Mantis      LV52  pos=(22,17) dir=2
+  slot  25: Hell Mantis      LV52  pos=(22,28) dir=2
+  slot  26: Frog Head        LV48  pos=(18,12) dir=2
+  slot  27: Frog Head        LV48  pos=(18,14) dir=2
+  slot  28: Grand Savage     LV52  pos=(21,14) dir=2
+  slot  30: Sky Rift         LV44  pos=(26,23) dir=2
+  slot  31: Screamer         LV44  pos=(0,0) dir=0
+  slot  32: Screamer         LV46  pos=(0,0) dir=0
+  slot  33: Screamer         LV48  pos=(0,0) dir=0
+
+=== Etage 21  (Map 17, Party 921) ===
+  slot  16: Frog Head        LV50  pos=(15,23) dir=3
+  slot  17: Frog Head        LV50  pos=(17,23) dir=3
+  slot  18: Menos Grande     LV55  pos=(17,21) dir=3
+  slot  19: Huge Hollow      LV55  pos=(28,26) dir=3
+  slot  20: Screamer         LV50  pos=(30,26) dir=3
+  slot  21: Screamer         LV50  pos=(32,26) dir=3
+  slot  22: Menos Grande     LV55  pos=(32,21) dir=3
+  slot  23: Kusaka           LV62  pos=(22,14) dir=3
+  slot  25: Sky Rift         LV46  pos=(13,25) dir=0
+  slot  26: Familiar         LV46  pos=(0,0) dir=0
+  slot  27: Familiar         LV48  pos=(0,0) dir=0
+  slot  28: Familiar         LV50  pos=(0,0) dir=0
+  slot  30: Sky Rift         LV46  pos=(19,12) dir=3
+  slot  31: Screamer         LV46  pos=(0,0) dir=3
+  slot  32: Screamer         LV48  pos=(0,0) dir=3
+  slot  33: Screamer         LV50  pos=(0,0) dir=3
+  slot  35: Sky Rift         LV46  pos=(24,13) dir=3
+  slot  36: Screamer         LV46  pos=(0,0) dir=3
+  slot  37: Screamer         LV48  pos=(0,0) dir=3
+  slot  38: Screamer         LV50  pos=(0,0) dir=3
+
+=== Etage 22  (Map 13, Party 922) ===
+  slot  16: Frog Head        LV50  pos=(14,19) dir=1
+  slot  17: Frog Head        LV50  pos=(11,19) dir=1
+  slot  18: Evil Eater       LV58  pos=(13,22) dir=1
+  slot  19: Hiyori           LV64  pos=(14,23) dir=1
+  slot  20: Familiar         LV50  pos=(25,23) dir=3
+  slot  21: Familiar         LV50  pos=(27,23) dir=3
+  slot  22: Hell Mantis      LV52  pos=(24,21) dir=3
+  slot  23: Hell Mantis      LV52  pos=(27,21) dir=3
+  slot  24: Shinji           LV64  pos=(25,18) dir=3
+  slot  25: Grand Savage     LV58  pos=(18,17) dir=2
+  slot  26: Wide Bone        LV58  pos=(23,17) dir=3
+  slot  28: Sky Rift         LV48  pos=(10,22) dir=1
+  slot  29: Screamer         LV48  pos=(0,0) dir=0
+  slot  30: Screamer         LV50  pos=(0,0) dir=0
+  slot  31: Screamer         LV52  pos=(0,0) dir=0
+  slot  33: Sky Rift         LV48  pos=(25,16) dir=3
+  slot  34: Frog Head        LV48  pos=(0,0) dir=0
+  slot  35: Frog Head        LV50  pos=(0,0) dir=0
+  slot  36: Frog Head        LV52  pos=(0,0) dir=0
+
+=== Etage 23  (Map 16, Party 923) ===
+  slot  16: Evil Eater       LV58  pos=(26,23) dir=1
+  slot  17: Wide Bone        LV58  pos=(29,23) dir=1
+  slot  18: Wide Bone        LV58  pos=(23,23) dir=1
+  slot  19: Familiar         LV55  pos=(28,25) dir=1
+  slot  20: Familiar         LV55  pos=(26,25) dir=1
+  slot  21: Screamer         LV55  pos=(25,26) dir=1
+  slot  22: Screamer         LV55  pos=(23,26) dir=1
+  slot  23: Nakeem           LV66  pos=(27,27) dir=1
+  slot  24: D-Roy            LV66  pos=(24,27) dir=1
+  slot  25: Numb Jelly       LV58  pos=(12,13) dir=3
+  slot  26: Numb Jelly       LV58  pos=(15,14) dir=3
+  slot  27: Screamer         LV55  pos=(15,25) dir=2
+  slot  28: Screamer         LV55  pos=(14,27) dir=2
+  slot  29: Menos Grande     LV60  pos=(20,14) dir=0
+  slot  31: Sky Rift         LV50  pos=(20,17) dir=3
+  slot  32: Familiar         LV50  pos=(0,0) dir=3
+  slot  33: Familiar         LV52  pos=(0,0) dir=3
+  slot  34: Familiar         LV54  pos=(0,0) dir=3
+  slot  36: Sky Rift         LV50  pos=(23,28) dir=1
+  slot  37: Screamer         LV50  pos=(0,0) dir=1
+  slot  38: Screamer         LV52  pos=(0,0) dir=1
+  slot  39: Screamer         LV54  pos=(0,0) dir=1
+  slot  41: Sky Rift         LV50  pos=(15,23) dir=2
+  slot  42: Hell Mantis      LV50  pos=(0,0) dir=2
+  slot  43: Hell Mantis      LV52  pos=(0,0) dir=2
+  slot  44: Hell Mantis      LV54  pos=(0,0) dir=2
+
+=== Etage 24  (Map 34, Party 924) ===
+  slot  16: Wide Bone        LV60  pos=(13,18) dir=0
+  slot  17: Frog Head        LV55  pos=(11,20) dir=0
+  slot  18: Frog Head        LV55  pos=(11,15) dir=0
+  slot  19: Yammy            LV68  pos=(9,16) dir=0
+  slot  20: Screamer         LV55  pos=(21,27) dir=1
+  slot  21: Screamer         LV55  pos=(25,27) dir=1
+  slot  22: Shawlong         LV68  pos=(22,31) dir=1
+  slot  23: Numb Jelly       LV60  pos=(20,12) dir=3
+  slot  24: Hell Mantis      LV55  pos=(17,12) dir=3
+  slot  25: Hell Mantis      LV55  pos=(22,12) dir=3
+  slot  26: Sky Rift         LV52  pos=(9,18) dir=0
+  slot  27: Frog Head        LV52  pos=(0,0) dir=0
+  slot  28: Frog Head        LV54  pos=(0,0) dir=0
+  slot  29: Frog Head        LV56  pos=(0,0) dir=0
+  slot  31: Sky Rift         LV52  pos=(23,29) dir=1
+  slot  32: Screamer         LV52  pos=(0,0) dir=1
+  slot  33: Screamer         LV54  pos=(0,0) dir=1
+  slot  34: Screamer         LV56  pos=(0,0) dir=1
+  slot  36: Sky Rift         LV52  pos=(18,9) dir=3
+  slot  37: Familiar         LV52  pos=(0,0) dir=3
+  slot  38: Familiar         LV54  pos=(0,0) dir=3
+  slot  39: Familiar         LV56  pos=(0,0) dir=3
+  slot  41: Hell Mantis      LV58  pos=(14,18) dir=0
+  slot  42: Hell Mantis      LV58  pos=(15,15) dir=0
+  slot  43: Hell Mantis      LV58  pos=(16,23) dir=0
+  slot  44: Frog Head        LV58  pos=(19,27) dir=1
+  slot  45: Frog Head        LV58  pos=(22,28) dir=1
+  slot  46: Frog Head        LV58  pos=(26,27) dir=1
+  slot  47: Familiar         LV58  pos=(17,15) dir=3
+  slot  48: Familiar         LV58  pos=(19,14) dir=3
+  slot  49: Familiar         LV58  pos=(23,14) dir=3
+  slot  50: Screamer         LV58  pos=(26,20) dir=2
+  slot  51: Screamer         LV58  pos=(28,18) dir=2
+  slot  52: Screamer         LV58  pos=(27,16) dir=2
+
+=== Etage 25  (Map 4, Party 925) ===
+  slot  16: Huge Hollow      LV65  pos=(22,20) dir=1
+  slot  17: Grand Savage     LV60  pos=(28,23) dir=0
+  slot  18: Wide Bone        LV60  pos=(19,26) dir=2
+  slot  19: Menos Grande     LV65  pos=(23,25) dir=1
+  slot  20: Ilfort           LV70  pos=(22,33) dir=1
+  slot  21: Edrad            LV70  pos=(28,33) dir=1
+  slot  23: Sky Rift         LV54  pos=(19,23) dir=2
+  slot  24: Screamer         LV54  pos=(0,0) dir=2
+  slot  25: Screamer         LV56  pos=(0,0) dir=2
+  slot  26: Screamer         LV58  pos=(0,0) dir=2
+  slot  28: Sky Rift         LV54  pos=(25,23) dir=0
+  slot  29: Frog Head        LV54  pos=(0,0) dir=0
+  slot  30: Frog Head        LV56  pos=(0,0) dir=0
+  slot  31: Frog Head        LV58  pos=(0,0) dir=0
+  slot  33: Sky Rift         LV56  pos=(19,28) dir=1
+  slot  34: Hell Mantis      LV56  pos=(0,0) dir=1
+  slot  35: Hell Mantis      LV58  pos=(0,0) dir=1
+  slot  36: Hell Mantis      LV60  pos=(0,0) dir=1
+  slot  38: Sky Rift         LV56  pos=(27,28) dir=1
+  slot  39: Familiar         LV56  pos=(0,0) dir=1
+  slot  40: Familiar         LV58  pos=(0,0) dir=1
+  slot  41: Familiar         LV60  pos=(0,0) dir=1
+
+=== Etage 26  (Map 6, Party 926) ===
+  slot  16: Evil Eater       LV65  pos=(18,20) dir=3
+  slot  17: Wide Bone        LV60  pos=(21,19) dir=3
+  slot  18: Grand Savage     LV60  pos=(11,18) dir=3
+  slot  19: Grand Savage     LV60  pos=(24,18) dir=3
+  slot  20: Numb Jelly       LV68  pos=(14,15) dir=3
+  slot  21: Numb Jelly       LV68  pos=(18,15) dir=3
+  slot  22: Ulquiorra        LV74  pos=(16,12) dir=3
+  slot  23: Sky Rift         LV56  pos=(9,20) dir=3
+  slot  24: Familiar         LV56  pos=(0,0) dir=3
+  slot  25: Familiar         LV58  pos=(0,0) dir=3
+  slot  26: Familiar         LV60  pos=(0,0) dir=3
+  slot  28: Sky Rift         LV56  pos=(27,20) dir=3
+  slot  29: Familiar         LV56  pos=(0,0) dir=3
+  slot  30: Familiar         LV58  pos=(0,0) dir=3
+  slot  31: Familiar         LV60  pos=(0,0) dir=3
+  slot  33: Sky Rift         LV60  pos=(13,11) dir=3
+  slot  34: Frog Head        LV60  pos=(0,0) dir=3
+  slot  35: Frog Head        LV62  pos=(0,0) dir=3
+  slot  36: Frog Head        LV64  pos=(0,0) dir=3
+  slot  38: Sky Rift         LV60  pos=(18,11) dir=3
+  slot  39: Frog Head        LV60  pos=(0,0) dir=3
+  slot  40: Frog Head        LV62  pos=(0,0) dir=3
+  slot  41: Frog Head        LV64  pos=(0,0) dir=3
+
+=== Etage 27  (Map 25, Party 927) ===
+  slot  16: Hell Mantis      LV62  pos=(21,25) dir=3
+  slot  17: Hell Mantis      LV62  pos=(27,25) dir=3
+  slot  18: Wide Bone        LV65  pos=(19,24) dir=3
+  slot  19: Numb Jelly       LV65  pos=(27,21) dir=3
+  slot  20: Huge Hollow      LV68  pos=(24,23) dir=3
+  slot  21: Screamer         LV65  pos=(20,21) dir=3
+  slot  22: Screamer         LV65  pos=(26,18) dir=3
+  slot  23: Mad Eater        LV72  pos=(22,13) dir=3
+  slot  24: Arturo           LV78  pos=(19,11) dir=3
+  slot  26: Sky Rift         LV58  pos=(23,20) dir=3
+  slot  27: Familiar         LV58  pos=(0,0) dir=3
+  slot  28: Familiar         LV60  pos=(0,0) dir=3
+  slot  29: Familiar         LV62  pos=(0,0) dir=3
+  slot  31: Sky Rift         LV60  pos=(25,13) dir=3
+  slot  32: Hell Mantis      LV60  pos=(0,0) dir=3
+  slot  33: Hell Mantis      LV62  pos=(0,0) dir=3
+  slot  34: Hell Mantis      LV64  pos=(0,0) dir=3
+  slot  36: Sky Rift         LV60  pos=(17,14) dir=3
+  slot  37: Screamer         LV60  pos=(0,0) dir=3
+  slot  38: Screamer         LV62  pos=(0,0) dir=3
+  slot  39: Screamer         LV64  pos=(0,0) dir=3
+
+=== Etage 28  (Map 11, Party 928) ===
+  slot  16: Gin              LV82  pos=(12,21) dir=0
+  slot  17: Tosen            LV82  pos=(12,18) dir=0
+  slot  18: Sky Rift         LV60  pos=(23,31) dir=1
+  slot  19: Familiar         LV60  pos=(0,0) dir=1
+  slot  20: Familiar         LV62  pos=(0,0) dir=1
+  slot  21: Familiar         LV64  pos=(0,0) dir=1
+  slot  22: Familiar         LV66  pos=(0,0) dir=1
+  slot  23: Familiar         LV68  pos=(0,0) dir=1
+  slot  24: Familiar         LV70  pos=(0,0) dir=1
+  slot  25: Familiar         LV72  pos=(0,0) dir=1
+  slot  26: Familiar         LV74  pos=(0,0) dir=1
+  slot  27: Familiar         LV76  pos=(0,0) dir=1
+  slot  29: Sky Rift         LV60  pos=(17,25) dir=0
+  slot  30: Familiar         LV60  pos=(0,0) dir=0
+  slot  31: Familiar         LV62  pos=(0,0) dir=0
+  slot  32: Familiar         LV64  pos=(0,0) dir=0
+  slot  33: Familiar         LV66  pos=(0,0) dir=0
+  slot  34: Familiar         LV68  pos=(0,0) dir=0
+  slot  35: Familiar         LV70  pos=(0,0) dir=0
+  slot  36: Familiar         LV72  pos=(0,0) dir=0
+  slot  37: Familiar         LV74  pos=(0,0) dir=0
+  slot  38: Familiar         LV76  pos=(0,0) dir=0
+  slot  40: Sky Rift         LV60  pos=(21,13) dir=3
+  slot  41: Familiar         LV60  pos=(0,0) dir=3
+  slot  42: Familiar         LV62  pos=(0,0) dir=3
+  slot  43: Familiar         LV64  pos=(0,0) dir=3
+  slot  44: Familiar         LV66  pos=(0,0) dir=3
+  slot  45: Familiar         LV68  pos=(0,0) dir=3
+  slot  46: Familiar         LV70  pos=(0,0) dir=3
+  slot  47: Familiar         LV72  pos=(0,0) dir=3
+  slot  48: Familiar         LV74  pos=(0,0) dir=3
+  slot  49: Familiar         LV76  pos=(0,0) dir=3
+  slot  51: Sky Rift         LV60  pos=(17,15) dir=0
+  slot  52: Familiar         LV60  pos=(0,0) dir=0
+  slot  53: Familiar         LV62  pos=(0,0) dir=0
+  slot  54: Familiar         LV64  pos=(0,0) dir=0
+  slot  55: Familiar         LV66  pos=(0,0) dir=0
+  slot  56: Familiar         LV68  pos=(0,0) dir=0
+  slot  57: Familiar         LV70  pos=(0,0) dir=0
+  slot  58: Familiar         LV72  pos=(0,0) dir=0
+  slot  59: Familiar         LV74  pos=(0,0) dir=0
+  slot  60: Familiar         LV76  pos=(0,0) dir=0
+
+=== Etage 29  (Map 33, Party 929) ===
+  slot  16: Grimmjow         LV86  pos=(15,19) dir=0
+  slot  17: Edrad            LV80  pos=(19,24) dir=0
+  slot  18: Ilfort           LV80  pos=(19,16) dir=0
+  slot  19: Nakeem           LV75  pos=(17,21) dir=0
+  slot  20: D-Roy            LV75  pos=(17,17) dir=0
+  slot  21: Yammy            LV86  pos=(14,21) dir=0
+  slot  22: Shawlong         LV80  pos=(15,17) dir=0
+  slot  23: Ulquiorra        LV86  pos=(13,19) dir=0
+  slot  24: Sky Rift         LV62  pos=(13,25) dir=0
+  slot  25: Frog Head        LV62  pos=(0,0) dir=0
+  slot  26: Frog Head        LV64  pos=(0,0) dir=0
+  slot  27: Frog Head        LV66  pos=(0,0) dir=0
+  slot  28: Frog Head        LV68  pos=(0,0) dir=0
+  slot  29: Frog Head        LV70  pos=(0,0) dir=0
+  slot  30: Frog Head        LV72  pos=(0,0) dir=0
+  slot  32: Sky Rift         LV62  pos=(13,15) dir=0
+  slot  33: Screamer         LV62  pos=(0,0) dir=0
+  slot  34: Screamer         LV64  pos=(0,0) dir=0
+  slot  35: Screamer         LV66  pos=(0,0) dir=0
+  slot  36: Screamer         LV68  pos=(0,0) dir=0
+  slot  37: Screamer         LV70  pos=(0,0) dir=0
+  slot  38: Screamer         LV72  pos=(0,0) dir=0
+
+=== Etage 30  (Map 31, Party 930) ===
+  slot  16: Arturo           LV85  pos=(20,23) dir=0
+  slot  17: Kenpachi         LV85  pos=(20,20) dir=0
+  slot  18: Suzunami         LV85  pos=(20,17) dir=0
+  slot  19: Ichigo           LV83  pos=(18,24) dir=0
+  slot  20: Soi Fon          LV80  pos=(17,15) dir=0
+  slot  21: Yoruichi         LV80  pos=(17,13) dir=0
+  slot  22: Tosen            LV83  pos=(17,21) dir=0
+  slot  23: Ulquiorra        LV83  pos=(18,19) dir=0
+  slot  24: D-Roy            LV78  pos=(15,18) dir=0
+  slot  25: Yamamoto         LV85  pos=(15,16) dir=0
+  slot  26: Gin              LV83  pos=(15,22) dir=0
+  slot  27: Grimmjow         LV90  pos=(13,19) dir=0
+  slot  30: Sky Rift         LV64  pos=(19,28) dir=0
+  slot  31: Hell Mantis      LV64  pos=(0,0) dir=0
+  slot  32: Hell Mantis      LV66  pos=(0,0) dir=0
+  slot  33: Hell Mantis      LV68  pos=(0,0) dir=0
+  slot  34: Hell Mantis      LV72  pos=(0,0) dir=0
+  slot  35: Hell Mantis      LV76  pos=(0,0) dir=0
+  slot  36: Hell Mantis      LV80  pos=(0,0) dir=0

@@ -1,0 +1,514 @@
+﻿id,name
+0, 
+1,Ryujinjyakka
+2,Suzumebachi
+3,Shinso
+4,Wabisuke
+5,Minazuki
+6,Hisagomaru
+7,Shiden
+8,Kyokasuigetsu
+9,Nejibana
+10,Ryujomaru
+11,Kotomaru
+12,Tobiume
+13,Senbonzakura
+14,Zabimaru
+15,Tenken
+16,Katenkyokotsu
+17,Suzumushi
+18,Hakuda
+19,Hyorinmaru
+20,Haineko
+21,Hozukimaru
+22,Fujikujaku
+23,Benihime
+24,Ashisogijizo
+25,Sogyonokotowari
+26,Sodenoshirayuki
+27,Mumei
+28,Asauchi
+29,Hakuda
+30,Axes
+31,Zangetsu
+32,Brazo Derecha D.G.
+33,Ginreikojaku
+34,Shunshunrikka
+35,Cane
+36,Zanpakuto
+37,Zanpakuto
+38,Zanpakuto
+39,Tijereta
+40,Volcanica
+41,Del Toro
+42,Zanpakuto
+43,Zanpakuto
+44,Fenice
+45,　
+46,No Zanpakuto
+47,Zanpakuto
+48,Zanpakuto
+49,Ryujomaru
+50,Ryujomaru
+51,Kotomaru
+52,Kotomaru
+53,Ryujomaru
+54,Ryujomaru
+55,Ryujomaru
+56,Kotomaru
+57,Kotomaru
+58,Kotomaru
+59,Kokyu
+60,Kokyu
+61,Kokyu
+62,Ryukyu
+63,Ryukyu
+64,Ryukyu
+65,Minazuki
+66,Kokujo Tengen Myo-oh
+67,Konjiki Ashisogijizo
+68,Senbon. Kageyoshi
+69,Hihio Zabimaru
+70,Enmakorogi
+71,Daiguren Hyorinmaru
+72,Ryumon Hozukimaru
+73,Tensa Zangetsu
+74,Pantera
+75,Zanpakuto
+76,Zanpakuto
+77,Hyorinmaru
+78,Ryujomaru
+79,Kotomaru
+80, 
+81, 
+82, 
+83, 
+84, 
+85, 
+86, 
+87, 
+88, 
+89, 
+90, 
+91, 
+92, 
+93, 
+94, 
+95, 
+96, 
+97, 
+98, 
+99, 
+100,Sai
+101,Hainawa
+102,Kakushitsuijaku
+103,Rikujokoro
+104,Tenteikura
+105,Byakurai
+106,Shakkaho
+107,Sokatsui
+108,Haien
+109,Raikoho
+110,Soren Sokatsui
+111,Kurohitsugi
+112,Shimoku
+113,Katsujumei
+114,Soeigeki
+115,Shihyosen
+116,Keikatsu
+117,Meiyu
+118,Kokkai
+119,Shikuka
+120,Borosesshun
+121,Flash Tangeki
+122,Flash Chogeki
+123,Senpenbanka
+124,Santenkesshun
+125,Sotenkishun
+126,Kotenzanshun
+127,Ginreikojaku
+128,Hirenkyaku
+129,Brazo D Gigante
+130,El Directo
+131,La Muerte
+132,Cannon Ball
+133,Pesquisa
+134,Hierro
+135,Sonido
+136,Cero
+137,Bala
+138,Gonzui
+139,Nigeki Kessatsu
+140,Seeleschneider
+141,Oscuro
+142,Dementia
+143,Shunko
+144,Yazuhomura no O
+145,Zenkai
+146,Minazuki
+147,Rengoku
+148,Rasen
+149,Shunkofujin
+150,Hisagomaru
+151,AkeiroHisagomaru
+152,Senka
+153,Pnt Blk Shakkaho
+154,Fujikujaku
+155,Tsukishiro
+156,Hakuren
+157,Blood Shield
+158,Gran Rey Cero
+159,Expiacion
+160,Agarrar Cero
+161,S Kageyoshi
+162,SS Kageyoshi
+163,ShukeiHakuteiken
+164,Higazekko
+165,Hikotsutaiho
+166,Sennenhyoro
+167,Getsugatensho
+168,Shunshinraijin
+169,Desgarrón
+170,SN Benihiko
+171,Senkaidan
+172,Shigasumi
+173,Shidenraiko
+174,Self-Destruct
+175, 
+176, 
+177, 
+178, 
+179, 
+180, 
+181, 
+182,DesperateStrike
+183, 
+184, 
+185, 
+186, 
+187, 
+188, 
+189, 
+190, 
+191, 
+192, 
+193, 
+194, 
+195, 
+196, 
+197, 
+198, 
+199, 
+200,Shunko
+201, 
+202, 
+203, 
+204, 
+205, 
+206, 
+207, 
+208, 
+209,Bankai
+210, 
+211, 
+212,Shunko
+213, 
+214, 
+215,Bankai
+216, 
+217, 
+218, 
+219, 
+220, 
+221, 
+222, 
+223, 
+224,Shunko
+225, 
+226, 
+227,Bankai 1
+228,Bankai 2
+229,Bankai 3
+230,Bankai 1
+231,Bankai 2
+232,Bankai 3
+233,Bankai 1
+234,Bankai 2
+235,Bankai 3
+236,Bankai 1
+237,Bankai 2
+238,Bankai 3
+239,Bankai 1
+240,Bankai 2
+241,Bankai 3
+242,Zenkai 1
+243,Zenkai 2
+244,Zenkai 3
+245,Bankai 1
+246,Bankai 2
+247,Bankai 3
+248,Bankai 1
+249,Bankai 2
+250,Bankai 3
+251,Shunko
+252, 
+253, 
+254,Bankai 1
+255,Bankai 2
+256,Bankai 3
+257,Release 1
+258,Release 2
+259,Release 3
+260,BK Length 1
+261,BK Length 2
+262,BK Length 3
+263,RL Length 1
+264,RL Length 2
+265,RL Length 3
+266, 
+267, 
+268, 
+269,ZK Length 1
+270,ZK Length 2
+271,ZK Length 3
+272, 
+273,BK Length 1
+274,BK Length 2
+275,BK Length 3
+276,BK Length 1
+277,BK Length 2
+278,BK Length 3
+279, 
+280, 
+281, 
+282, 
+283, 
+284, 
+285, 
+286, 
+287, 
+288, 
+289, 
+290, 
+291, 
+292, 
+293, 
+294, 
+295, 
+296, 
+297, 
+298, 
+299, 
+300,Power
+301,Accuracy
+302,Efficiency
+303,Eishohaki
+304,Atk S Boost
+305,Def S Boost
+306,Support +
+307,Healing +
+308,Stat Boost
+309,Co-op Slot
+310,Ability Slot
+311, 
+312,Mobility +1
+313,Hold 1
+314,Hold 2
+315,Hold 3
+316,Hold 4
+317,Hold 5
+318,Poison 1
+319,Poison 2
+320,Poison 3
+321,Poison 4
+322,Poison 5
+323,Burn 1
+324,Burn 2
+325,Burn 3
+326,Burn 4
+327,Burn 5
+328,Freeze 1
+329,Freeze 2
+330,Freeze 3
+331,Freeze 4
+332,Freeze 5
+333,Shock 1
+334,Shock 2
+335,Shock 3
+336,Shock 4
+337,Shock 5
+338,Res Hold 1
+339,Res Hold 2
+340,Res Hold 3
+341,Res Hold 4
+342,Block Hold
+343,Res Poison 1
+344,Res Poison 2
+345,Res Poison 3
+346,Res Poison 4
+347,Block Poison
+348,Res Burn 1
+349,Res Burn 2
+350,Res Burn 3
+351,Res Burn 4
+352,Block Burn
+353,Res Freeze 1
+354,Res Freeze 2
+355,Res Freeze 3
+356,Res Freeze 4
+357,Block Freeze
+358,Res Shock 1
+359,Res Shock 2
+360,Res Shock 3
+361,Res Shock 4
+362,Block Shock
+363,Res SP Atk 1
+364,Res SP Atk 2
+365,Res SP Atk 3
+366,Res HP Atk 1
+367,Res HP Atk 2
+368,Res HP Atk 3
+369,Block Venom
+370,Homonka Blck
+371,Absolute Def
+372,Sure Hit
+373,Sure Evade
+374,First Strike
+375,Hit & Run
+376,Early Riser
+377,Late Starter
+378,Dire Attack
+379,Dire Defense
+380,Dire Focus
+381,Dire Evasion
+382,Reckless Hit
+383,Dire Boost
+384,Tenacity
+385,Reliable Hit
+386,Iron Defense
+387,Guts & Glory
+388,S-Pressure + 
+389, 
+390, 
+391, 
+392, 
+393, 
+394, 
+395,Fast Learner
+396, 
+397,Gemstone
+398, 
+399, 
+400,Awakened
+401,Block S-Dest
+402, 
+403, 
+404, 
+405, 
+406, 
+407, 
+408, 
+409, 
+410, 
+411, 
+412, 
+413, 
+414, 
+415, 
+416, 
+417, 
+418, 
+419, 
+420, 
+421, 
+422, 
+423, 
+424, 
+425, 
+426, 
+427, 
+428, 
+429, 
+430, 
+431, 
+432, 
+433, 
+434, 
+435, 
+436, 
+437, 
+438, 
+439, 
+440, 
+441, 
+442, 
+443, 
+444, 
+445, 
+446, 
+447, 
+448, 
+449,Route End
+450, 
+451, 
+452, 
+453, 
+454, 
+455, 
+456, 
+457, 
+458, 
+459, 
+460, 
+461, 
+462, 
+463, 
+464, 
+465, 
+466, 
+467, 
+468, 
+469, 
+470, 
+471, 
+472, 
+473, 
+474, 
+475, 
+476, 
+477, 
+478, 
+479, 
+480, 
+481, 
+482, 
+483, 
+484, 
+485, 
+486, 
+487, 
+488, 
+489, 
+490, 
+491, 
+492, 
+493, 
+494, 
+495, 
+496, 
+497, 
+498, 
+499, 
+500, 
+501, 
+502, 
+503, 
+504, 
+505, 
+506, 
+507, 
+508, 
+509, 
+510, 
+511, 
+512, 
