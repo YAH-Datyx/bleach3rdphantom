@@ -46,10 +46,12 @@ ARM9_STATUS_ROM = 0x101C52
 
 # Vanilla-Referenz (dumps/vanilla_ref.json, aus der unmodifizierten ROM):
 #   floors: Etage -> initial platzierte Original-Slots {slot, active, raw}.
-#     Der Randomizer darf NUR diese Slots belegen - mehr Gegner als im
-#     Original crashen die Etage (in-game verifiziert: 27 auf der 8er-Etage
-#     14 = Crash, 8 auf Original-Slots = laeuft). Slots ohne Startposition
-#     (x=y=0) sind Wellen-Verstaerkungen und bleiben aussen vor.
+#     Der Randomizer nimmt sie als Templates (AI-raw/Team) und fuellt bei
+#     Bedarf mit Extra-Slots auf - das ist in-game verifiziert (Etage 1 mit
+#     25 Gegnern auf den Slots 16-40). Sonder-Records (x=y=0, Welle -3)
+#     sind nicht enthalten. ACHTUNG: enthalten sind aber die echten
+#     NACHSCHUB-Slots (Welle 1-3) der Etagen 5/6/9/23/24 - deren raw[0]
+#     darf nicht mitgeklont werden, sonst spawnt der Gegner nicht.
 #   stats: unit -> [hp, sp, atk, def, hit, eva] Vanilla-Basiswerte.
 #     Boosts rechnen IMMER von diesen Werten aus - dadurch idempotent,
 #     kein Aufschaukeln ueber mehrere Sessions/Randomize-Laeufe mehr.
@@ -124,6 +126,19 @@ OUTLIER_SCALE = 1.1
 #   an -> darf ziehen -> greift SOFORT wieder an, Endloskette bis zum Tod
 #   (in-game 2026-07-07: Yachiru auf Etage 2, User-Report)
 AI_ABUSE_PASSIVES = {375}
+
+# PFLICHT-FAEHIGKEITEN. 370 und 401 (beide kind=4, Wert 999 in
+# db_ability.inc) tragen im Original genau die 59 BENANNTEN Einheiten
+# (Captains, Espada, Vize-Captains) - Hollows, Soul-Reaper-Mobs, Zivilisten
+# und Zanpakuto-Wesen haben sie NICHT. Die Stat-Randomisierung hat bisher
+# die Slots 1-9 pauschal ueberschrieben und sie damit geloescht; genau die
+# betroffenen Chars zeigen in-game die kaputten 53/11 HP (HANDOVER 5.3).
+# Deshalb: nie ueberschreiben, nie wuerfeln - und nur bei den Einheiten
+# eintragen, die sie im Vanilla-Record wirklich hatten (nichts erfinden).
+ESSENTIAL_ABILITIES = (370, 401)
+#   unit (str) -> Liste der Pflicht-Faehigkeiten dieses Vanilla-Records.
+#   Erzeugt aus dumps/characters.csv via tools/gen_essential_abil.py.
+ESSENTIAL_ABIL = VANILLA_REF.get('essential_abil', {})
 
 # Thematische Preset-Batches fuer den Tower-Tab (nur verifizierte
 # Pool-IDs, Riesen-Sprites bewusst nicht enthalten). Namen: names.csv.
@@ -902,7 +917,8 @@ class App(tk.Tk):
             return
         passives = [a for a, nm in self.abil_names.items()
                     if nm.strip() and self.abil_kind.get(a) in (3, 4, 5, 7)
-                    and a not in AI_ABUSE_PASSIVES]
+                    and a not in AI_ABUSE_PASSIVES
+                    and a not in ESSENTIAL_ABILITIES]
         n = 0
         for li, unit, name, typ in self.char_rows:
             if unit in self.risky_units:
@@ -1200,6 +1216,13 @@ class App(tk.Tk):
                           font=G_FONT_B, relief='flat', bd=0, padx=12, pady=4,
                           cursor='hand2', command=self._skill_chaos)
         chaos.pack(side='left', padx=(0, 12))
+        # HP-Bug-Werkzeug: stellt 370/401 bei allen Chars wieder her, denen
+        # eine frueherer Randomisierung sie weggewuerfelt hat (HANDOVER 5.3).
+        fix = tk.Button(rnd, text='370/401 reparieren', bg='#1f8a4c', fg='white',
+                        activebackground='#2fb468', activeforeground='black',
+                        font=G_FONT_B, relief='flat', bd=0, padx=12, pady=4,
+                        cursor='hand2', command=self._repair_essential_abil)
+        fix.pack(side='left', padx=(0, 12))
         ttk.Button(rnd, text='?', width=2,
                    command=self._randomizer_info).pack(side='left', padx=(8, 0))
 
@@ -2301,10 +2324,17 @@ class App(tk.Tk):
             '- Level = Ziel-Level +-5; Stats skalieren mit Faktor\n'
             '  (1+Level/100) x 1.25 (Ausreisser-Stats gedaempft).\n'
             '- Jeder Charakter max. 1x; max. 25 pro Etage (in-game\n'
-            '  bisektiert, 26 = Crash). Riesen-Sprites (Jidanbo, Menos ...)\n'
+            '  bisektiert, 26 = Crash). Grund sind laut Decompiler die\n'
+            '  32 Aktor-Plaetze, die die Deploy-Party zuerst belegt -\n'
+            '  nicht die Sprite-Zahl. Riesen-Sprites (Jidanbo, Menos ...)\n'
             '  und NONCOM-Chars (Healer/Zivilisten) sind ausgeschlossen.\n'
-            '- Jeder Gegner bekommt 5 Zufalls-Skills + 4 Passiva\n'
-            '  (Hit & Run ausgenommen - AI-Endloszuege).\n'
+            '- Jeder Gegner bekommt 7 Zufalls-Skills (4 aktiv/3 passiv)\n'
+            '  (Hit & Run ausgenommen - AI-Endloszuege). Die Pflicht-\n'
+            '  Faehigkeiten 370/401 bleiben erhalten, wenn der Charakter\n'
+            '  sie im Original hatte (Verdacht auf den HP-Bug).\n'
+            '- Alle Gegner landen in Welle 0, erscheinen also beim\n'
+            '  Betreten der Etage (vorher konnten geklonte Nachschub-\n'
+            '  Slots dafuer sorgen, dass Gegner unsichtbar blieben).\n'
             '- Positionen: nur begehbare Felder, nie auf/neben Deploy-\n'
             '  Slots; Blickrichtung zum Deploy-Zentrum.\n\n'
             'Filter-Zeile: "nur aus" wuerfelt nur aus einem Batch,\n'
@@ -2444,6 +2474,14 @@ class App(tk.Tk):
         new_units = list(keep)
         for tpl, (gx, gy), char in zip(templates, random.sample(cells, count), chars):
             raw = list(tpl.get('raw', [0] * 19))
+            # raw[0] = WELLE (dpos +0x10, s16). Nur Welle 0 spawnt beim
+            # Betreten der Etage; 1-3 sind Nachschub, -3 (=65533) Sonderfaelle.
+            # Aus Ghidra (Overlay 1, FUN_02182068) und gegen alle 499
+            # Vanilla-Records gegengeprueft - 100 % trennscharf.
+            # Die Vanilla-Templates der Etagen 5/6/9/23/24 enthalten
+            # Nachschub-Slots (36 von 376); wird deren raw[0] mitgeklont,
+            # steht der Gegner in der Tabelle, erscheint aber nicht.
+            raw[0] = 0
             # raw[1] = AI-Typ, raw[2] = Aggressivitaet (Vanilla: 3/100 = jagt
             # den Spieler aktiv, 0/0 = wartet bis man sich naehert)
             if behave == 'Aggressiv':
@@ -2501,6 +2539,83 @@ class App(tk.Tk):
                                     for i in range(6)]
         return self._pool_avg_cache
 
+    @staticmethod
+    def _abil_loadout(unit, actives, passives):
+        """Zufalls-Loadout fuer die Faehigkeits-Slots 1-9 eines Charakters.
+
+        -> {token_index: ability_id}. Slot 0 (Set-ID) wird nie angefasst.
+        Die Pflicht-Faehigkeiten des Vanilla-Records (ESSENTIAL_ABILITIES)
+        werden zuerst reserviert und hinten eingetragen, der Rest wird im
+        Verhaeltnis 5 Aktive : 4 Passiva aufgefuellt. Hat der Charakter im
+        Original keine Pflicht-Faehigkeiten (Hollows, Mobs, Zivilisten),
+        bleibt es bei 9 Zufallswerten wie bisher."""
+        keep = [a for a in ESSENTIAL_ABIL.get(str(unit), [])
+                if a in ESSENTIAL_ABILITIES]
+        free = len(ABIL_TOKENS) - 1 - len(keep)         # 9 Slots minus Pflicht
+        n_act = min(round(free * 5 / 9), len(actives))
+        n_pas = min(free - n_act, len(passives))
+        loadout = random.sample(actives, n_act) + random.sample(passives, n_pas)
+        loadout = (loadout + [0] * free)[:free] + keep  # Pflicht ganz hinten
+        return {ABIL_TOKENS[i + 1]: v for i, v in enumerate(loadout)}
+
+    def _repair_essential_abil(self, silent=False):
+        """Pflicht-Faehigkeiten 370/401 bei ALLEN Charakteren wiederherstellen,
+        die sie im Vanilla-Record hatten (HANDOVER 5.3 - Verdacht auf die
+        Ursache der kaputten 53/11 HP).
+
+        Repariert die Chars, die eine fruehere Randomisierung bereits
+        beschaedigt hat. Idempotent: wer sie schon hat, wird nicht angefasst.
+        Geschrieben wird in die hintersten freien Slots 1-9; ist alles belegt,
+        werden die letzten Zufalls-Slots geopfert. Slot 0 bleibt tabu."""
+        if not self.fs:
+            return 0
+        n, touched = 0, []
+        for li, unit, name, typ in self.char_rows:
+            need = [a for a in ESSENTIAL_ABIL.get(str(unit), [])
+                    if a in ESSENTIAL_ABILITIES]
+            if not need:
+                continue
+            toks = line_tokens(self.status_lines[li])
+            if len(toks) != TOKENS_PER_LINE:
+                continue
+            ab = [toks[t][2] for t in ABIL_TOKENS]
+            miss = [a for a in need if a not in ab]
+            if not miss:
+                continue
+            # Zielslots: erst leere von hinten, dann die hintersten belegten
+            free = [i for i in range(9, 0, -1) if ab[i] == 0]
+            busy = [i for i in range(9, 0, -1) if ab[i] != 0]
+            for a in miss:
+                slot = free.pop(0) if free else busy.pop(0)
+                ab[slot] = a
+            self.status_lines[li] = replace_tokens(
+                self.status_lines[li], dict(zip(ABIL_TOKENS, ab)))
+            touched.append(f'{unit} {name}')
+            n += 1
+        if n:
+            self.dirty_status = True
+            self._on_char_select()          # Anzeige des gewaehlten Chars frisch
+            self._update_abil_preview()
+        if not silent:
+            if n:
+                self.status_var.set(
+                    f'{n} Charaktere repariert: Pflicht-Faehigkeiten '
+                    f'{"/".join(str(a) for a in ESSENTIAL_ABILITIES)} wieder '
+                    'eingetragen (noch nicht gespeichert).')
+                messagebox.showinfo(
+                    'Pflicht-Faehigkeiten repariert',
+                    f'{n} Charaktere hatten 370/401 nicht mehr:\n\n'
+                    + ', '.join(touched[:25])
+                    + ('\n...' if len(touched) > 25 else '')
+                    + '\n\nJetzt speichern und Etage 15 in DeSmuME testen:\n'
+                      'zeigt Kenpachi wieder normale HP, war das die Ursache.')
+            else:
+                messagebox.showinfo(
+                    'Pflicht-Faehigkeiten',
+                    'Alles in Ordnung - jeder Charakter, der 370/401 im '
+                    'Original hatte, hat sie auch jetzt.')
+        return n
+
     def _boost_stats(self, chars, hp_f, st_f):
         """Charaktere aufwerten: Basis-Stats hochskalieren (HP-Faktor, Stat-
         Faktor fuer SP/ATK/DEF/HIT/EVA) UND Faehigkeiten randomisieren:
@@ -2514,7 +2629,8 @@ class App(tk.Tk):
                    if nm.strip() and self.abil_kind.get(a) == 2]
         passives = [a for a, nm in self.abil_names.items()
                     if nm.strip() and self.abil_kind.get(a) in (3, 4, 5, 7)
-                    and a not in AI_ABUSE_PASSIVES]
+                    and a not in AI_ABUSE_PASSIVES
+                    and a not in ESSENTIAL_ABILITIES]
         n = 0
         for li, unit, name, typ in self.char_rows:
             if unit not in chars:
@@ -2536,9 +2652,11 @@ class App(tk.Tk):
                 val = b * st_f if b <= knee else \
                     knee * st_f + (b - knee) * OUTLIER_SCALE
                 upd[t] = min(int(val), 200)
-            # Faehigkeiten-Slots 1-9 neu wuerfeln (Slot 0 = Set-ID bleibt)
-            loadout = random.sample(actives, 5) + random.sample(passives, 4)
-            upd.update({ABIL_TOKENS[i + 1]: v for i, v in enumerate(loadout)})
+            # Faehigkeiten-Slots 1-9 neu wuerfeln (Slot 0 = Set-ID bleibt).
+            # Die Pflicht-Faehigkeiten des Vanilla-Records (370/401) bleiben
+            # IMMER drin und landen HINTEN - genau wie im Original, wo sie
+            # nach den echten Faehigkeiten stehen (Kenpachi: 242 370 401).
+            upd.update(self._abil_loadout(unit, actives, passives))
             self.status_lines[li] = replace_tokens(self.status_lines[li], upd)
             self.god_boosted.add(unit)
             n += 1
