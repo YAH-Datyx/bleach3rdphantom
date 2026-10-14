@@ -14,11 +14,18 @@ Datenquellen in der ROM:
                    Player-Team spawnen.)
     u16 char      (Charakter-ID, Namen siehe names.csv)
     u16 level
-    u16 unk3      (immer 10)
-    u16 x, y      (Grid-Koordinaten)
-    u16 dir       (Blickrichtung 0-3)
-    u16 unk7      (immer 1)
-    u16 raw[18]   (AI/Drops/Extras - unveraendert lassen)
+    u16 unk3      (= u8 ai_mode bei +0x06 + u8 Flags bei +0x07; Flags sind in
+                   Vanilla immer 0. Vanilla-ai_mode: 0/10/13/15/17/18,
+                   meist 10. Vermutlich 10=aktiv/boss, 15=passiv/patrol)
+    u16 x, y      (Grid-Koordinaten, 1-basiert)
+    u16 dir       (Blickrichtung: 0=Ost, 1=Nord, 2=West, 3=Sued)
+    u16 unk7      (Gruppe/Team-Filter beim Spawn; Vanilla 1-13)
+    u16 raw[18]   (raw[n] liegt bei +0x10 + 2n)
+      raw[0]      WELLE (s16): 0 = spawnt beim Betreten, 1/2/3 = Nachschub,
+                  -3 (65533) = Sonder-Record (Objekte, x=y=0).
+                  NUR Welle 0 erscheint beim Betreten der Etage!
+      raw[1]      AI-Typ,  raw[2] Aggression 0-100
+      Rest        Drops/Extras - unveraendert lassen
   /yamada/DataBase/db_party_9NN.narc Spieler-Deployment-Slots
 """
 import json, struct, sys, os

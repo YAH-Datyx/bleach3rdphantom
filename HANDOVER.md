@@ -154,11 +154,17 @@ u16 x | u16 y | u16 dir | u16 unk7 | u16 raw[18]
 ```
 
 - **TEAM:** `3`=Gegner, `1`=Spieler, `5`=Objekt (z. B. Sky Rift)
-- **unk3:** Bedeutung UNBEKANNT (Vanilla: 0/10/13/15/17/18) — **kein Stat-Flag**
+- **unk3:** `u8 ai_mode` bei `+0x06`, dahinter ein Flags-Byte bei `+0x07`
+  (in Vanilla immer 0, deshalb ist die u16-Lesart folgenlos). Vermutlich
+  `10`=aktiv/boss, `15`=passiv/patrol — **kein Stat-Flag** (bewiesen).
 - **dir:** `0`=Ost(+x), `1`=Nord(-y), `2`=West(-x), `3`=Süd(+y)
+- **`raw[0]` = WELLE** (`s16` bei `+0x10`): **nur Welle 0 spawnt beim Betreten**
+  der Etage, `1/2/3` sind Nachschub, `-3` (=65533) Sonderfälle (Objekte,
+  `x=y=0`). Aus Ghidra (`FUN_02182068`) und gegen alle 499 Vanilla-Records
+  geprüft: trennscharf, keine Ausnahme. Merkregel: `raw[n]` liegt bei `+0x10+2n`.
 - **raw[1]** = AI-Typ, **raw[2]** = Aggression 0-100 (Vanilla: `3/100` = jagt
   aktiv, `0/0` = wartet defensiv)
-- Reinforcement-/Wave-Einheiten: `x=y=0`, `unk7=10`, `raw[0]=65533`
+- Sonder-Records (`raw[0] = -3`): `x=y=0`, `unk7=10`
 
 ### 3.5 Koordinaten (häufige Fehlerquelle)
 
@@ -167,7 +173,13 @@ u16 x | u16 y | u16 dir | u16 unk7 | u16 raw[18]
 
 ### 3.6 Harte Limits
 
-- **25 unique Sprites pro Etage** = OK, **26 = CRASH** (in-game bisektiert)
+- **25 Gegner pro Etage** = OK, **26 = CRASH** (in-game bisektiert). Die Ursache
+  ist **nicht** das Sprite-Limit, sondern **32 Aktor-Plätze, die die Party
+  zuerst belegt** (Ghidra, `FUN_02182068`): `25 + 6 Deploy = 31 ≤ 32`.
+  Gezählt werden **Einheiten, nicht Sprites** — Dubletten kosten auch Plätze.
+  Ungetestet, aber vorhergesagt: weniger Deploy-Slots → mehr Gegner möglich.
+- **Nur die ersten 64 dpos-Slots** werden überhaupt gelesen (unsere Extra-Slots
+  gehen bis 40, liegen also sicher darunter)
 - **Riesen** (BIG_UNITS: Grand Savage 148-150, Menos 163-165, Huge Hollow
   166-168, Jidanbo 237, Giant Entity 252) fressen 4 Felder → aus Randomizer raus
 - **NONCOM** (attackType 0/4: Unohana, Hanataro, Female Spirit …) **crashen
@@ -258,11 +270,28 @@ die eigentlich tausende HP haben müssten.
 | HP-Low-Byte-Überlauf (53 = HP & 0xFF) | NEIN — passt zu keinem Char |
 | **`unk3` = 10 statt 15** | **WIDERLEGT** — Vanilla nutzt 0/10/13/15/17/18, meist **10** |
 
-### 5.3 STÄRKSTER OFFENER VERDACHT: Fähigkeiten 370 & 401
+### 5.3 STÄRKSTER VERDACHT: Fähigkeiten 370 & 401 — Fix ist eingebaut, TEST OFFEN
 
-**Jeder** Vanilla-Kampfcharakter trägt die Fähigkeiten **370 und 401**
-(370 bei 57 Chars, 401 bei 58 Chars). Beide sind `kind=4` in `db_ability.inc`
-mit dem Wert `999` — sieht nach einem **Cap/Limit oder Stat-Grundstock** aus.
+> **Stand 2026-10-14: Der Fix ist im Editor, die Reparatur auch.
+> Was fehlt, ist dein DeSmuME-Test.** Ablauf unten in 5.3.1.
+
+**Genau 59 Vanilla-Einheiten tragen 370 und 401** (beide, immer zusammen —
+aus `dumps/characters.csv` ausgezählt). Beide sind `kind=4` in
+`db_ability.inc` mit dem Wert `999` — sieht nach einem **Cap/Limit oder
+Stat-Grundstock** aus.
+
+**Wichtige Präzisierung:** Es ist *nicht* „jeder Kampfchar". Es sind die
+**benannten** Einheiten — Captains, Espada, Vize-Captains. **Nicht** dabei:
+Hollows (Screamer, Mad Eater, Hell Mantis, Wide Bone, Frog Head, Familiar,
+Menos …), die Soul-Reaper-Mobs 63-68, Zivilisten und Zanpakuto-Wesen.
+Auch Yamamoto (1) und Ichigo (94) haben sie nicht.
+
+> **Das passt exakt zum Schadensbild:** Alle gemeldeten Kaputt-Fälle
+> (Kenpachi 141, Ulquiorra 113 — Etage 15, Lv90) sind Einheiten **mit**
+> 370/401, denen der Randomizer sie weggewürfelt hat. Die Hollow-Etage 11
+> besteht ausschließlich aus Einheiten, die sie **nie** hatten — und von dort
+> gibt es keine HP-Meldung. Die Korrelation hält also auch nach dem
+> genaueren Auszählen.
 
 **Die Skill-Randomisierung des Editors überschreibt die Ability-Slots 1-9 und
 löscht damit 370 und 401.** Beispiel Kenpachi:
@@ -278,17 +307,39 @@ Der Zanpakuto-Set-ID in Slot 0 bleibt korrekt erhalten — nur 370/401 fallen ra
 Ulquiorra ist aktuell der einzige mit intakten `[36, 377, 370, 401, …]` —
 weil er als Kontrollprobe zurückgesetzt wurde.
 
-> **NÄCHSTER TEST (bitte zuerst machen):**
-> 370 und 401 bei den Etage-15-Chars wieder in die Ability-Slots eintragen
-> (ARM9 `+50` u16[10], Slot 0 unangetastet lassen), dann Etage 15 in DeSmuME
-> spielen und die HP von Kenpachi prüfen.
+#### 5.3.1 Was eingebaut ist (2026-10-14)
+
+| Was | Wo |
+|---|---|
+| Referenz: welche 59 Einheiten hatten 370/401 | `dumps/vanilla_ref.json` → `essential_abil`, erzeugt von `tools/gen_essential_abil.py` |
+| Konstanten `ESSENTIAL_ABILITIES` / `ESSENTIAL_ABIL` | `stat_editor.py` (bei `AI_ABUSE_PASSIVES`) |
+| Würfeln löscht sie nicht mehr | neues `_abil_loadout()`, genutzt von `_boost_stats` |
+| Sie werden auch nicht mehr an Chars **verteilt**, die sie nie hatten | aus beiden `passives`-Pools ausgeschlossen |
+| Reparatur bereits beschädigter Chars | Button **„370/401 reparieren"** (grün) im Tower-Tab, Methode `_repair_essential_abil` |
+| Regressionstest ohne ROM | `python tools/test_essential_abil.py` |
+
+Das Loadout hat jetzt 7 Zufalls-Skills (4 aktiv / 3 passiv) + 370 + 401 auf
+den Slots 8 und 9 — **hinten**, genau wie in Vanilla (Kenpachi: `242 370 401`).
+Das ist bewusst so: falls die beiden als Terminator/Cap wirken, muss alles
+Echte **davor** stehen. Chars ohne Anspruch behalten 9 Zufallswerte.
+Die Reparatur ist idempotent und lässt Slot 0 in Ruhe.
+
+> **DEIN NÄCHSTER TEST:**
+> 1. Editor starten, Tower-Tab, Button **„370/401 reparieren"** → er sagt dir,
+>    wie viele Chars betroffen waren.
+> 2. Speichern, Etage 15 in DeSmuME spielen (über „Continue", **nicht**
+>    über einen Savestate!).
+> 3. **HP von Kenpachi (141) und Ulquiorra (113) melden** — ATK/ACC/EVA mit
+>    dazu, dann füllt sich auch die Tabelle in 5.4.
 >
-> - **HP normal** → Ursache gefunden. Dann: Randomizer so ändern, dass 370/401
->   **immer** erhalten bleiben (in `_randomize_floor` / `_skill_chaos`), und
->   alle bereits randomisierten Chars reparieren.
+> - **HP normal** → Ursache gefunden, Bug zu. Ulquiorra bleibt schwach (ATK 17),
+>   das ist die Kontrollprobe und Absicht.
 > - **HP weiter 53** → nächster Verdächtiger ist das **AI-Subfile 1**
 >   (bei Etage 15 wich Block 1 von Vanilla ab: mod `ids=[]` vs. vanilla
->   `ids=[5,26,17,13,107,372,344,371]`).
+>   `ids=[5,26,17,13,107,372,344,371]`). Danach die HP-Formel am **Code**
+>   aufrollen statt am Verhalten: der Ghidra-Zweig im GitHub-Repo hat die
+>   Toolchain dafür (`tools/re/ghidra/`, headless), und die Frage „wer liest
+>   die Stat-Tabelle `0x020FD882`?" ist dort schon als Ziel notiert.
 
 ### 5.4 Zweiter Hinweis: Stat-Tabellen-Level
 
@@ -326,8 +377,11 @@ in `_randomize_floor`.
 
 ## 7. FALLEN — nicht wiederholen
 
-1. **`unk3=15` ist kein HP-Fix** (s. o.). Die Kampagnen-Etagen stehen aktuell
-   auf 15; Vanilla hätte f11=13, f12/f13 meist 10, f14/f15=15. Ggf. zurücksetzen.
+1. **`unk3=15` ist kein HP-Fix** (s. o.). Die Kampagnen-Etagen stehen auf 15.
+   Vanilla ist **f11=13, f12=10, f13=10 — f14/f15 sind mit 15 schon korrekt**.
+   Betroffen ist also nur 11-13, und für das Etage-15-Experiment ist `unk3`
+   **kein Störfaktor**. Zurücksetzen: `python tools/fix_unk3.py` (Trockenlauf),
+   `--write` zum Anwenden, `--mode aktiv` für die „10 = aggressiv"-Wette.
 2. **Bankai für Gegner: unmöglich per Daten.** Volle Testmatrix (AI-Skript-IDs,
    Pressure 100, Tail-Bytes, volle Leiste) — Gegner nutzen NIE Bankai. Trigger
    liegt im Battle-CODE. **Der User lehnt Execute-Breakpoints ab** ("hat nie
@@ -350,10 +404,19 @@ in `_randomize_floor`.
 
 ## 8. Nächste Schritte (Priorität)
 
-1. **HP-Bug lösen** — Test aus 5.3 durchführen (370/401 wiederherstellen).
-2. **`unk3` auf Vanilla-Werte zurücksetzen** (f11=13, f12/f13=10, f14/f15=15),
-   sobald klar ist, dass es nicht hilft — der Blanket-15-Wert war ungeprüft.
-3. **Randomizer-Fairness** auf Sprite-Ebene umstellen (Abschnitt 6).
+1. **HP-Bug: Test aus 5.3.1 durchführen.** Fix und Reparatur-Button sind
+   eingebaut, es fehlt nur der DeSmuME-Lauf auf Etage 15.
+2. **`unk3` zurücksetzen** auf den Etagen 11-13 (14/15 sind korrekt):
+   `python tools/fix_unk3.py --write`. Nebenbei der Test, ob 10 die Gegner
+   aggressiver macht (`--mode aktiv`).
+3. **Randomizer-Fairness** auf Sprite-Ebene umstellen (Abschnitt 6) —
+   noch nicht beauftragt. Der zweite Grund für „manche sehe ich nie" ist
+   dagegen **gefixt**: der Randomizer klonte auf den Etagen 5/6/9/23/24
+   Nachschub-Slots mit `raw[0] != 0`, die beim Betreten gar nicht spawnen
+   (s. `KNOWLEDGE_MERGE.md`). Jetzt wird `raw[0] = 0` erzwungen.
+3b. **Gegner-Limit nachmessen:** Laut Decompiler sind es 32 Aktor-Plätze
+   minus Deploy-Slots, keine 25 Sprites. Test: 30 Gegner mit nur 10
+   verschiedenen Charakteren. Läuft das, kann `MAX_UNIQUE_SPRITES` hoch.
 4. Editor-Redesign — `EDITOR-VISUALS.md` liegt bereit für eine Design-AI.
    Constraint: tkinter/ttk, keine runden Ecken/Schatten, nur System-Fonts.
 5. Offen im Backlog: XP-Belohnungen, Item-Drops, Wave-/Entry-Conditions,
